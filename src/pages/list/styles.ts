@@ -5,7 +5,6 @@ export const style = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        // backgroundColor: 'red'
     },
     header: {
         width: '100%',
@@ -25,11 +24,10 @@ export const style = StyleSheet.create({
     boxList: {
         flex: 1,
         width: '100%',
-        // backgroundColor: 'red'
     },
     card: {
         width: '100%',
-        height: 60,
+        minHeight: 60,
         backgroundColor: '#FFF',
         marginTop: 6,
         borderRadius: 10,
@@ -55,8 +53,16 @@ export const style = StyleSheet.create({
         fontWeight: 'bold'
     },
     descriptionCard: {
-        fontSize: 14,
         color: themas.colors.gray
+    },
+    button: {
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 100,
+        marginVertical: 10,
+        borderRadius: 10
     }
+
 
 })
