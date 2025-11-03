@@ -1,29 +1,34 @@
+// routes/index.routes.ts
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import Login from "../pages/login";
-import BottomRoutes from "./bottom.routes";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "../pageEntrar/login";
+import Cadastro from "../pageEntrar/register";
+import Esqueceu from "../pageEntrar/esqueceusenha";
+import Home from "../pageHome/principal/home";
+
+export type StackParamList = {
+  Login: undefined;
+  Cadastro: undefined;
+  Esqueceu: undefined;
+  Home: {
+    email?: string;
+    usuario?: string;
+    loginType?: "google" | "email";
+  };
+};
+
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function Routes() {
-    const Stack = createStackNavigator()
-
-    return (
-        <Stack.Navigator
-            initialRouteName="Login"
-            screenOptions={{
-                headerShown: false,
-                cardStyle: {
-                    backgroundColor: "#FFF"
-                }
-            }}
-        >
-            <Stack.Screen
-                name="Login"
-                component={Login}
-            />
-            <Stack.Screen
-                name="BottomRoutes"
-                component={BottomRoutes}
-            />
-        </Stack.Navigator>
-    )
+  return (
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Cadastro" component={Cadastro} />
+      <Stack.Screen name="Esqueceu" component={Esqueceu} />
+      <Stack.Screen name="Home" component={Home} />
+    </Stack.Navigator>
+  );
 }
