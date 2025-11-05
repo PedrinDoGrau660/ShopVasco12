@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Linking, TouchableOpacity } from "react-native";
 import { style } from "./styles";
 import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
+import { FontAwesome } from "@expo/vector-icons";
 
 type HomeRouteProp = RouteProp<StackParamList, "Home">;
 
@@ -15,35 +16,53 @@ export default function Home({ route }: Props) {
 
   return (
     <View style={style.container}>
-      <Text style={style.welcome}>
-        Bem-vindo, {usuario || "Usuário"}!
-      </Text>
-      
-      <Text style={style.email}>
-        Email: {email || "Não informado"}
-      </Text>
+      {/* 🔝 ÍCONES SOCIAIS */}
+      <View style={style.socialContainer}>
+        <TouchableOpacity onPress={() => Linking.openURL("https://facebook.com")}>
+          <FontAwesome name="facebook" size={22} color="#fff" />
+        </TouchableOpacity>
 
-      {/* Mostra o tipo de login se estiver disponível */}
-      {loginType && (
-        <View style={[
-          style.loginTypeBadge, 
-          loginType === 'google' ? style.googleBadge : style.emailBadge
-        ]}>
-          <Text style={style.loginTypeText}>
-            Login via: {loginType === "google" ? "Google" : "Email/Senha"}
-          </Text>
-        </View>
-      )}
+        <TouchableOpacity onPress={() => Linking.openURL("https://twitter.com")}>
+          <FontAwesome name="twitter" size={22} color="#fff" />
+        </TouchableOpacity>
 
-      {/* Informações adicionais para demo */}
-      <View style={style.demoInfo}>
-        <Text style={style.demoTitle}>Demo do Sistema</Text>
-        <Text style={style.demoText}>
-          • Login tradicional: Email/Senha{'\n'}
-          • Login social: Google (simulado){'\n'}
-          • Navegação com parâmetros{'\n'}
-          • Tipagem TypeScript
-        </Text>
+        <TouchableOpacity onPress={() => Linking.openURL("https://instagram.com")}>
+          <FontAwesome name="instagram" size={22} color="#fff" />
+        </TouchableOpacity>
+
+        <TouchableOpacity  onPress={() => Linking.openURL("https://pinterest.com")}>
+          <FontAwesome name="pinterest" size={22} color="#fff" />
+        </TouchableOpacity>
+
+        <TouchableOpacity  onPress={() => Linking.openURL("https://vk.com")}>
+          <FontAwesome name="vk" size={22} color="#fff" />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
+          <FontAwesome name="telegram" size={22} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={style.headersup}>
+        <Text style={style.titleright}>Vasco</Text>
+      </View>
+
+      <View style={{ marginTop: 120 }}>
+        <Text style={style.welcome}>Bem-vindo, {usuario || "Usuário"}!</Text>
+        <Text style={style.email}>Email: {email || "Não informado"}</Text>
+
+        {loginType && (
+          <View
+            style={[
+              style.loginTypeBadge,
+              loginType === "google" ? style.googleBadge : style.emailBadge,
+            ]}
+          >
+            <Text style={style.loginTypeText}>
+              Login via: {loginType === "google" ? "Google" : "Email/Senha"}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

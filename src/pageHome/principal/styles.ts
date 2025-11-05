@@ -1,66 +1,83 @@
 import { StyleSheet } from "react-native";
 
-
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#111",
   },
-  welcome: {
+
+  socialContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "#000000ff",
+    paddingVertical: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: "#C00000",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 30, // acima de tudo
+    elevation: 30, // Android
+  },
+
+  headersup: {
+    position: "absolute",
+    top: 60,
+    left: 0,
+    right: 0,
+    backgroundColor: "#000",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 3,
+    borderBottomColor: "#C00000",
+    alignItems: "flex-end", // Mude de "center" para "flex-end"
+    justifyContent: "center",
+    zIndex: 10,
+    elevation: 10,
+},
+
+titleright: {
     fontSize: 24,
     fontWeight: "bold",
-    color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  email: {
+    color: "#fff",
+    textTransform: "uppercase",
+    textAlign: "right",
+},
+
+  welcome: {
+    color: "#fff",
     fontSize: 18,
-    color: '#666',
-    marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
+    marginTop: 20,
   },
-  loginTypeBadge: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginBottom: 30,
-  },
-  googleBadge: {
-    backgroundColor: '#DB4437', // Vermelho Google
-  },
-  emailBadge: {
-    backgroundColor: '#007AFF', // Azul padrão
-  },
-  loginTypeText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  demoInfo: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '100%',
-    maxWidth: 300,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  demoTitle: {
+
+  email: {
+    color: "#ccc",
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
+    marginTop: 10,
   },
-  demoText: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
+
+  loginTypeBadge: {
+    alignSelf: "center",
+    marginTop: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+  },
+
+  googleBadge: {
+    backgroundColor: "#DB4437",
+  },
+
+  emailBadge: {
+    backgroundColor: "#1E90FF",
+  },
+
+  loginTypeText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

@@ -80,7 +80,7 @@ export default function Login() {
     }, 2000);
   };
 
-  // Abre o modal de seleção de conta Google
+  
   const handleGoogleLogin = () => {
     setLoadingGoogle(true);
     
@@ -101,7 +101,7 @@ export default function Login() {
 
     setSelectedAccount(account);
     
-    // Simula o processo de autenticação
+   
     setTimeout(() => {
       setShowGoogleModal(false);
       navigation.navigate("Home", {
