@@ -22,7 +22,7 @@ export const style = StyleSheet.create({
     elevation: 30, // Android
   },
 
-  headersup: {
+ headersup: {
     position: "absolute",
     top: 60,
     left: 0,
@@ -32,7 +32,7 @@ export const style = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 3,
     borderBottomColor: "#C00000",
-    alignItems: "flex-end", // Mude de "center" para "flex-end"
+    alignItems: "center", // Mude de "flex-end" para "center"
     justifyContent: "center",
     zIndex: 10,
     elevation: 10,

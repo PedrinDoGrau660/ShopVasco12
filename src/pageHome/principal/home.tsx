@@ -4,6 +4,7 @@ import { style } from "./styles";
 import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
 import { FontAwesome } from "@expo/vector-icons";
+import Hamburguer from "../hamburguer/hamburguer";
 
 type HomeRouteProp = RouteProp<StackParamList, "Home">;
 
@@ -16,6 +17,15 @@ export default function Home({ route }: Props) {
 
   return (
     <View style={style.container}>
+      {/* HEADER COM HAMBURGUER E TÍTULO */}
+      <View style={style.headersup}>
+        {/* Hamburguer posicionado à esquerda */}
+        <Hamburguer />
+        
+        {/* Título Vasco centralizado */}
+        <Text style={style.titleright}>Vasco</Text>
+      </View>
+      
       {/* 🔝 ÍCONES SOCIAIS */}
       <View style={style.socialContainer}>
         <TouchableOpacity onPress={() => Linking.openURL("https://facebook.com")}>
@@ -30,11 +40,11 @@ export default function Home({ route }: Props) {
           <FontAwesome name="instagram" size={22} color="#fff" />
         </TouchableOpacity>
 
-        <TouchableOpacity  onPress={() => Linking.openURL("https://pinterest.com")}>
+        <TouchableOpacity onPress={() => Linking.openURL("https://pinterest.com")}>
           <FontAwesome name="pinterest" size={22} color="#fff" />
         </TouchableOpacity>
 
-        <TouchableOpacity  onPress={() => Linking.openURL("https://vk.com")}>
+        <TouchableOpacity onPress={() => Linking.openURL("https://vk.com")}>
           <FontAwesome name="vk" size={22} color="#fff" />
         </TouchableOpacity>
 
@@ -43,27 +53,7 @@ export default function Home({ route }: Props) {
         </TouchableOpacity>
       </View>
 
-      <View style={style.headersup}>
-        <Text style={style.titleright}>Vasco</Text>
-      </View>
-
-      <View style={{ marginTop: 120 }}>
-        <Text style={style.welcome}>Bem-vindo, {usuario || "Usuário"}!</Text>
-        <Text style={style.email}>Email: {email || "Não informado"}</Text>
-
-        {loginType && (
-          <View
-            style={[
-              style.loginTypeBadge,
-              loginType === "google" ? style.googleBadge : style.emailBadge,
-            ]}
-          >
-            <Text style={style.loginTypeText}>
-              Login via: {loginType === "google" ? "Google" : "Email/Senha"}
-            </Text>
-          </View>
-        )}
-      </View>
+      
     </View>
   );
 }
