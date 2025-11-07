@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#111",
+    backgroundColor: "#ffffffff",
   },
 
   socialContainer: {
@@ -23,21 +23,23 @@ export const style = StyleSheet.create({
   },
 
  headersup: {
-    position: "absolute",
-    top: 60,
-    left: 0,
-    right: 0,
-    backgroundColor: "#000",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 3,
-    borderBottomColor: "#C00000",
-    alignItems: "center", // Mude de "flex-end" para "center"
-    justifyContent: "center",
-    zIndex: 10,
-    elevation: 10,
+  position: "absolute",
+  top: 40,
+  left: 0,
+  right: 0,
+  backgroundColor: "#000",
+  paddingVertical: 15,
+  paddingHorizontal: 20,
+  borderBottomWidth: 3,
+  borderBottomColor: "#C00000",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 10,
+  elevation: 10,
+  pointerEvents: "box-none",
+  overflow: "visible", // 👈 ESSENCIAL
+  flexDirection: "row",
 },
-
 titleright: {
     fontSize: 24,
     fontWeight: "bold",
@@ -80,4 +82,20 @@ titleright: {
     color: "#fff",
     fontWeight: "bold",
   },
+ imageBemVindo: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 5,
+  },
+
+  bannerImage: {
+    width: "90%",
+    height: 310, // 👈 mantém o tamanho grande
+  },
+  Logo:  {
+        width: 35,
+    height: 35,
+    
+  }
 });
+

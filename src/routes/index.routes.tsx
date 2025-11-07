@@ -20,15 +20,19 @@ export type StackParamList = {
 const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function Routes() {
-  return (
-    <Stack.Navigator
-      initialRouteName="Login"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Cadastro" component={Cadastro} />
-      <Stack.Screen name="Esqueceu" component={Esqueceu} />
-      <Stack.Screen name="Home" component={Home} />
-    </Stack.Navigator>
-  );
+ return (
+  <Stack.Navigator
+    initialRouteName="Login"
+    screenOptions={{ headerShown: false }}
+  >
+    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Cadastro" component={Cadastro} />
+    <Stack.Screen name="Esqueceu" component={Esqueceu} />
+    <Stack.Screen name="Home" component={Home} />
+
+    {/* <Stack.Screen name="Perfil" component={PerfilScreen} /> */}
+    {/* <Stack.Screen name="Config" component={ConfigScreen} /> */}
+    {/* <Stack.Screen name="Ajuda" component={AjudaScreen} /> */}
+  </Stack.Navigator>
+);
 }
