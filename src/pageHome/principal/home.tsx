@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Linking, TouchableOpacity,Image } from "react-native";
+import { View, Text, Linking, TouchableOpacity, Image, ScrollView } from "react-native";
 import { style } from "./styles";
 import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
@@ -7,9 +7,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import Hamburguer from "../hamburguer/hamburguer";
 import BemVindo from "../../assets/pageBemVindo.png";
 import Logo from "../../assets/forççaaaaa.png";
-
-
-
+import MyCarousel from "../../pageHome/Carousel/Carousel";
+import globo from "../../assets/globo.png"
+import CarouselText from "../Carousel/CarouselText";
 
 type HomeRouteProp = RouteProp<StackParamList, "Home">;
 
@@ -18,46 +18,51 @@ type Props = {
 };
 
 export default function Home({ route }: Props) {
-
   return (
     <View style={style.container}>
+      {/* Social Icons - Agora relativo */}
       <View style={style.socialContainer}>
         <TouchableOpacity onPress={() => Linking.openURL("https://facebook.com")}>
           <FontAwesome name="facebook" size={22} color="#fff" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => Linking.openURL("https://twitter.com")}>
           <FontAwesome name="twitter" size={22} color="#fff" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => Linking.openURL("https://instagram.com")}>
           <FontAwesome name="instagram" size={22} color="#fff" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => Linking.openURL("https://pinterest.com")}>
           <FontAwesome name="pinterest" size={22} color="#fff" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => Linking.openURL("https://vk.com")}>
           <FontAwesome name="vk" size={22} color="#fff" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
           <FontAwesome name="telegram" size={22} color="#fff" />
         </TouchableOpacity>
-      </View> 
-  
-      <View style={style.headersup}>
-           <Hamburguer />
-           <Image source={Logo} style={style.Logo}/>
-        <Text style={style.titleright}>Vasco</Text>
-        <Image source={Logo} style={style.Logo}/>
-      </View> 
+      </View>
 
-      <View style={style.imageBemVindo}>
-  <Image source={BemVindo} style={style.bannerImage} resizeMode="contain" />
-</View>
-    
+      <View style={style.headersup}>
+        <Hamburguer />
+        <Image source={Logo} style={style.Logo} />
+        <Text style={style.titleright}>Vasco</Text>
+        <Image source={Logo} style={style.Logo} />
+      </View>
+      <ScrollView style={style.content} showsVerticalScrollIndicator={false}>
+        <View style={style.imageBemVindo}>
+          <Image source={BemVindo} style={style.bannerImage} resizeMode="contain" />
+        </View>
+
+        <View style={style.containerTexto}>
+          <CarouselText/>
+        </View>
+
+        <View style={style.carousel}>
+          <MyCarousel />
+        </View>
+
+
+      </ScrollView>
     </View>
   );
 }
