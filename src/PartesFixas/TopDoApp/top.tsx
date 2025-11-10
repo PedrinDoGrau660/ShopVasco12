@@ -4,7 +4,7 @@ import { Top } from "./styletop"
 import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
 import { FontAwesome } from "@expo/vector-icons";
-import Hamburguer from "../hamburguer/hamburguer";
+import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
 
 type HomeRouteProp = RouteProp<StackParamList, "Home">;

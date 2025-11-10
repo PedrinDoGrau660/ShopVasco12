@@ -3,7 +3,7 @@ import { View, Text, Linking, TouchableOpacity, Image, ScrollView } from "react-
 import { style } from "./styles";
 import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import ParteDeCima from "../TopDoApp/top";
+import ParteDeCima from "../../PartesFixas/TopDoApp/top";
 import BemVindo from "../../assets/pageBemVindo.png";
 import MyCarousel from "../Carousel/CarouselHome";
 import CarouselText from "../Carousel/CarouselText";

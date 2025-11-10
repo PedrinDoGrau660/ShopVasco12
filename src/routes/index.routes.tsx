@@ -5,7 +5,8 @@ import Login from "../pageEntrar/login";
 import Cadastro from "../pageEntrar/register";
 import Esqueceu from "../pageEntrar/esqueceusenha";
 import Home from "../pageHome/principal/home";
-import Camisa1 from "../pageHome/pagesCamisa/camisa1/index"
+import Camisa1 from "../pagesCamisa/camisa1/index"
+import LinhaMasculina from "../LinhasDeCamisa/LinhaMasculina/index";
 
 export type StackParamList = {
   Login: undefined;
@@ -17,6 +18,7 @@ export type StackParamList = {
     loginType?: "google" | "email";
   };
    Camisa1: undefined;
+    LinhaMasculina: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
@@ -32,7 +34,7 @@ export default function Routes() {
     <Stack.Screen name="Esqueceu" component={Esqueceu} />
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="Camisa1" component={Camisa1} />
-
+    <Stack.Screen name="LinhaMasculina" component={LinhaMasculina} />
     {/* <Stack.Screen name="Perfil" component={PerfilScreen} /> */}
     {/* <Stack.Screen name="Config" component={ConfigScreen} /> */}
     {/* <Stack.Screen name="Ajuda" component={AjudaScreen} /> */}

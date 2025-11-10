@@ -16,7 +16,7 @@ export default function Hamburguer() {
   const [menuAberto, setMenuAberto] = useState(false);
   const slideAnim = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation(); // 👈 Hook para navegar
+  const navigation = useNavigation(); 
 
   // Função genérica para abrir/fechar
   const alternarMenu = () => {
@@ -109,8 +109,8 @@ export default function Hamburguer() {
           <Text style={styles.text}>Camisa1</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.item} onPress={() => navegarPara("Config")}>
-          <Text style={styles.text}>👤 Perfi</Text>
+        <TouchableOpacity style={styles.item} onPress={() => navegarPara("LinhaMasculina")}>
+          <Text style={styles.text}>LinhaMasculina</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("Ajuda")}>

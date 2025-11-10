@@ -7,7 +7,7 @@ export const style = StyleSheet.create({
   }, 
   sizesSection: {
     width: "100%",
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     marginTop: 20,
     marginBottom: 10,
   },
