@@ -5,7 +5,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
 import ParteDeCima from "../TopDoApp/top";
 import BemVindo from "../../assets/pageBemVindo.png";
-import MyCarousel from "../../pageHome/Carousel/Carousel";
+import MyCarousel from "../Carousel/CarouselHome";
 import CarouselText from "../Carousel/CarouselText";
 
 type HomeRouteProp = RouteProp<StackParamList, "Home">;
