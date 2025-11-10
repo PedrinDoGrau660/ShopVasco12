@@ -5,8 +5,10 @@ import Login from "../pageEntrar/login";
 import Cadastro from "../pageEntrar/register";
 import Esqueceu from "../pageEntrar/esqueceusenha";
 import Home from "../pageHome/principal/home";
-import Camisa1 from "../pagesCamisa/camisa1/index"
+import Camisa1 from "../pagesCamisa/camisa1/produtosdetalhes"
 import LinhaMasculina from "../LinhasDeCamisa/LinhaMasculina/index";
+import LinhaFeminina from "../LinhasDeCamisa/LinhaFeminina";
+import Conjunto from "../LinhasDeCamisa/Conjunto";
 
 export type StackParamList = {
   Login: undefined;
@@ -19,6 +21,8 @@ export type StackParamList = {
   };
    Camisa1: undefined;
     LinhaMasculina: undefined;
+LinhaFeminina: undefined;
+    Conjunto: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
@@ -35,6 +39,8 @@ export default function Routes() {
     <Stack.Screen name="Home" component={Home} />
     <Stack.Screen name="Camisa1" component={Camisa1} />
     <Stack.Screen name="LinhaMasculina" component={LinhaMasculina} />
+      <Stack.Screen name="LinhaFeminina" component={LinhaFeminina} />
+        <Stack.Screen name="Conjunto" component={Conjunto} />
     {/* <Stack.Screen name="Perfil" component={PerfilScreen} /> */}
     {/* <Stack.Screen name="Config" component={ConfigScreen} /> */}
     {/* <Stack.Screen name="Ajuda" component={AjudaScreen} /> */}

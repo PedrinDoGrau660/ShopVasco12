@@ -105,13 +105,18 @@ export default function Hamburguer() {
           <Text style={styles.text}>🏠 Início</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.item} onPress={() => navegarPara("Camisa1")}>
-          <Text style={styles.text}>Camisa1</Text>
+        <TouchableOpacity style={styles.item} onPress={() => navegarPara("LinhaFeminina")}>
+          <Text style={styles.text}>Linha Feminina</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("LinhaMasculina")}>
-          <Text style={styles.text}>LinhaMasculina</Text>
+          <Text style={styles.text}>Linha Masculina</Text>
         </TouchableOpacity>
+
+           <TouchableOpacity style={styles.item} onPress={() => navegarPara("Conjunto")}>
+          <Text style={styles.text}>Conjunto</Text>
+        </TouchableOpacity>
+
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("Ajuda")}>
           <Text style={styles.text}>📞 Ajuda</Text>

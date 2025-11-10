@@ -9,7 +9,6 @@ const availablePages = [
   { id: 3, number: "3" },
   { id: 4, number: "4" },
   { id: 5, number: "5" },
-  { id: 6, number: "6" },
 ];
 
 export default function Paginacao() {

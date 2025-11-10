@@ -16,7 +16,7 @@ import jaquetaImagem from '../../assets/dvd.jpg';
 import meiaoImagem from '../../assets/dvd.jpg';
 import moletomImagem from '../../assets/dvd.jpg';
 
-type HomeRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
+type HomeRouteProp = RouteProp<StackParamList, "Conjunto">;
 
 type Props = {
   route: HomeRouteProp;
@@ -31,7 +31,7 @@ type Produto = {
   imagem: any; // Imagem específica do produto
 };
 
-export default function LinhaMasculina() {
+export default function  Conjunto() {
   const [modalFiltroVisible, setModalFiltroVisible] = useState(false);
   const [classificacaoSelecionada, setClassificacaoSelecionada] = useState("Nome do Produto");
   const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState("Todas");
@@ -143,7 +143,7 @@ export default function LinhaMasculina() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={style.scrollContent}
       >
-        <Text style={style.tituloPagina}>Linha Masculina</Text>
+        <Text style={style.tituloPagina}>Conjunto</Text>
 
         {/* Botão Filtrar */}
         <View style={style.filtroContainer}>
