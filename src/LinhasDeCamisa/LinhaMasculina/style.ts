@@ -189,6 +189,61 @@ export const style = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  noResultsContainer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 40,
+  marginVertical: 20,
+},
+
+noResultsText: {
+  fontSize: 18,
+  color: '#666',
+  textAlign: 'center',
+  marginTop: 16,
+  fontWeight: 'bold',
+},
+
+noResultsSubText: {
+  fontSize: 14,
+  color: '#999',
+  textAlign: 'center',
+  marginTop: 8,
+},
+
+botaoLimparPesquisa: {
+  backgroundColor: '#C00000',
+  paddingHorizontal: 20,
+  paddingVertical: 12,
+  borderRadius: 8,
+  marginTop: 16,
+},
+
+textoBotaoLimparPesquisa: {
+  color: '#fff',
+  fontSize: 14,
+  fontWeight: 'bold',
+},
+
+pesquisaAtivaContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#f0f0f0',
+  paddingHorizontal: 12,
+  paddingVertical: 6,
+  borderRadius: 16,
+  marginLeft: 10,
+},
+
+pesquisaAtivaText: {
+  fontSize: 12,
+  color: '#666',
+  marginRight: 8,
+},
+
+limparPesquisaButton: {
+  padding: 4,
+},
   textoBotaoAplicar: {
     color: '#fff',
     fontWeight: 'bold',

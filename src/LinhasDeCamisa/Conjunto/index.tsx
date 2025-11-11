@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-native";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import ParteDeCima from "../../PartesFixas/TopDoApp/top";
+import ParteDeCima from "../../PartesFixas/TopDasLinhas/top";
 import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
 
-// Importe as imagens reais dos produtos
-import calcaImagem from '../../assets/dvd.jpg'; 
-import camisetaImagem from '../../assets/dvd.jpg';
-import shortsImagem from '../../assets/dvd.jpg';
-import jaquetaImagem from '../../assets/dvd.jpg';
-import meiaoImagem from '../../assets/dvd.jpg';
-import moletomImagem from '../../assets/dvd.jpg';
+// Importe as imagens reais dos conjuntos
+import conjunto1Imagem from '../../assets/dvd.jpg'; 
+import conjunto2Imagem from '../../assets/dvd.jpg';
+import conjunto3Imagem from '../../assets/dvd.jpg';
+import conjunto4Imagem from '../../assets/dvd.jpg';
+import conjunto5Imagem from '../../assets/dvd.jpg';
 
-type HomeRouteProp = RouteProp<StackParamList, "Conjunto">;
+// Defina as props corretamente
+type ConjuntoRouteProp = RouteProp<StackParamList, "Conjunto">;
 
 type Props = {
-  route: HomeRouteProp;
+  route: ConjuntoRouteProp;
 };
 
 type Produto = {
@@ -28,13 +28,19 @@ type Produto = {
   preco: number;
   precoOriginal?: number;
   subcategoria: string;
-  imagem: any; // Imagem específica do produto
+  imagem: any;
+  rota: keyof StackParamList;
 };
 
-export default function  Conjunto() {
+export default function Conjunto({ route }: Props) {
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
   const [modalFiltroVisible, setModalFiltroVisible] = useState(false);
   const [classificacaoSelecionada, setClassificacaoSelecionada] = useState("Nome do Produto");
   const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState("Todas");
+  
+  // ESTADO PARA PRODUTOS FILTRADOS (PESQUISA + FILTROS)
+  const [produtosFiltrados, setProdutosFiltrados] = useState<Produto[]>([]);
+  const [termoPesquisa, setTermoPesquisa] = useState(route.params?.searchTerm || "");
 
   const opcoesClassificacao = [
     "Nome do Produto",
@@ -42,76 +48,103 @@ export default function  Conjunto() {
     "Maior Preço"
   ];
 
+  // SUBCATEGORIAS ESPECÍFICAS PARA CONJUNTOS
   const opcoesSubcategorias = [
     "Todas",
-    "UNIFORME DE JOGO",
-    "INVERNO",
-    "CASUAL",
-    "SHORTS",
-    "MEIÃO",
-    "AQUECIMENTO",
-    "TREINO"
+    "CONJUNTOS MASCULINOS",
+    "CONJUNTOS FEMININOS",
+    "CONJUNTOS INFANTIS",
+    "CONJUNTOS TREINO",
+    "CONJUNTOS CASUAIS",
+    "KITS COMPLETOS"
   ];
 
-  // Dados de produtos com imagens específicas
+  // DADOS DE CONJUNTOS COM ROTAS ESPECÍFICAS
   const produtos: Produto[] = [
     { 
       id: 1, 
-      nome: "CALÇA AQUECIMENTO COMISSÃO VASCO 25", 
-      preco: 319.99, 
-      precoOriginal: 399.99, 
-      subcategoria: "AQUECIMENTO", 
-      imagem: calcaImagem 
+      nome: "KIT COMPLETO VASCO 2024", 
+      preco: 599.99, 
+      precoOriginal: 749.99, 
+      subcategoria: "KITS COMPLETOS", 
+      imagem: conjunto1Imagem,
+      rota: "KitCompleto"
     },
     { 
       id: 2, 
-      nome: "CAMISETA TREINO VASCO 2024", 
-      preco: 199.99, 
-      subcategoria: "TREINO", 
-      imagem: camisetaImagem 
+      nome: "CONJUNTO TREINO MASCULINO", 
+      preco: 349.99, 
+      subcategoria: "CONJUNTOS MASCULINOS", 
+      imagem: conjunto2Imagem,
+      rota: "ConjuntoTreinoMasculino"
     },
     { 
       id: 3, 
-      nome: "SHORTS JOGO VASCO PRINCIPAL", 
-      preco: 159.99, 
-      subcategoria: "UNIFORME DE JOGO", 
-      imagem: shortsImagem 
+      nome: "CONJUNTO FEMININO ELEGANCE", 
+      preco: 429.99, 
+      subcategoria: "CONJUNTOS FEMININOS", 
+      imagem: conjunto3Imagem,
+      rota: "ConjuntoFemininoElegance"
     },
     { 
       id: 4, 
-      nome: "JAQUETA INVERNO VASCO", 
+      nome: "KIT INFANTIL VASCO", 
       preco: 279.99, 
       precoOriginal: 349.99, 
-      subcategoria: "INVERNO", 
-      imagem: jaquetaImagem 
-    },
-    { 
-      id: 5, 
-      nome: "MEIÃO OFICIAL VASCO", 
-      preco: 49.99, 
-      subcategoria: "MEIÃO", 
-      imagem: meiaoImagem 
-    },
-    { 
-      id: 6, 
-      nome: "MOLETOM CASUAL VASCO", 
-      preco: 229.99, 
-      subcategoria: "CASUAL", 
-      imagem: moletomImagem 
+      subcategoria: "CONJUNTOS INFANTIS", 
+      imagem: conjunto4Imagem,
+      rota: "KitInfantil"
     },
   ];
 
-  // Função para aplicar filtros
-  const produtosFiltrados = produtos
-    .filter(produto => {
-      // Filtro por subcategoria
-      if (subcategoriaSelecionada !== "Todas" && produto.subcategoria !== subcategoriaSelecionada) {
-        return false;
-      }
-      return true;
-    })
-    .sort((a, b) => {
-      // Ordenação simples
+  // FUNÇÃO PARA LIDAR COM A PESQUISA
+  const handleSearch = (searchText: string) => {
+    setTermoPesquisa(searchText);
+    
+    if (!searchText.trim()) {
+      // Se a pesquisa estiver vazia, aplica apenas os filtros atuais
+      aplicarFiltrosEModal();
+      return;
+    }
+
+    // Filtra os produtos baseado no texto da pesquisa
+    const filtered = produtos.filter(produto =>
+      produto.nome.toLowerCase().includes(searchText.toLowerCase()) ||
+      produto.subcategoria.toLowerCase().includes(searchText.toLowerCase())
+    );
+    
+    // Aplica ordenação nos produtos filtrados
+    const filteredAndSorted = aplicarOrdenacao(filtered);
+    setProdutosFiltrados(filteredAndSorted);
+  };
+
+  // FUNÇÃO PARA APLICAR FILTROS E ORDENAÇÃO
+  const aplicarFiltrosEModal = () => {
+    let filtered = produtos;
+
+    // Filtro por subcategoria
+    if (subcategoriaSelecionada !== "Todas") {
+      filtered = filtered.filter(produto => 
+        produto.subcategoria === subcategoriaSelecionada
+      );
+    }
+
+    // Filtro por pesquisa (se houver termo)
+    if (termoPesquisa.trim()) {
+      filtered = filtered.filter(produto =>
+        produto.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
+        produto.subcategoria.toLowerCase().includes(termoPesquisa.toLowerCase())
+      );
+    }
+
+    // Aplica ordenação
+    const filteredAndSorted = aplicarOrdenacao(filtered);
+    setProdutosFiltrados(filteredAndSorted);
+  };
+
+  // FUNÇÃO PARA APLICAR ORDENAÇÃO
+  const aplicarOrdenacao = (produtosParaOrdenar: Produto[]) => {
+    return [...produtosParaOrdenar].sort((a, b) => {
       switch (classificacaoSelecionada) {
         case "Menor Preço":
           return a.preco - b.preco;
@@ -121,29 +154,56 @@ export default function  Conjunto() {
           return a.nome.localeCompare(b.nome);
       }
     });
+  };
+
+  // Função para navegar para a página do produto
+  const navegarParaProduto = (rota: keyof StackParamList) => {
+    navigation.navigate(rota as any);
+  };
 
   const aplicarFiltros = () => {
+    aplicarFiltrosEModal();
     setModalFiltroVisible(false);
   };
 
   const limparFiltros = () => {
     setClassificacaoSelecionada("Nome do Produto");
     setSubcategoriaSelecionada("Todas");
+    setTermoPesquisa("");
+    // Atualiza ParteDeCima com pesquisa vazia
+    handleSearch("");
   };
 
   const formatarPreco = (preco: number) => {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
   };
 
+  // UseEffect para aplicar a pesquisa quando o componente montar ou quando receber parâmetros
+  useEffect(() => {
+    if (route.params?.searchTerm) {
+      handleSearch(route.params.searchTerm);
+    } else {
+      aplicarFiltrosEModal();
+    }
+  }, [route.params?.searchTerm]);
+
+  // Inicializa os produtos filtrados quando o componente monta
+  useEffect(() => {
+    aplicarFiltrosEModal();
+  }, []);
+
   return (
     <View style={style.container}>
-      <ParteDeCima />
+      {/* ParteDeCima com barra de pesquisa */}
+      <ParteDeCima onSearch={handleSearch} showSearchBar={true} />
+      
       <ScrollView 
         style={style.scrollView}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={style.scrollContent}
       >
-        <Text style={style.tituloPagina}>Conjunto</Text>
+        {/* TÍTULO ALTERADO PARA CONJUNTOS */}
+        <Text style={style.tituloPagina}>Conjuntos e Kits</Text>
 
         {/* Botão Filtrar */}
         <View style={style.filtroContainer}>
@@ -154,11 +214,45 @@ export default function  Conjunto() {
             <FontAwesome name="filter" size={16} color="#fff" />
             <Text style={style.textoBotaoFiltrar}>Filtrar</Text>
           </TouchableOpacity>
+          
+          {/* Mostra termo de pesquisa atual */}
+          {termoPesquisa && (
+            <View style={style.pesquisaAtivaContainer}>
+              <Text style={style.pesquisaAtivaText}>
+                Pesquisando por: "{termoPesquisa}"
+              </Text>
+              <TouchableOpacity 
+                onPress={() => handleSearch("")}
+                style={style.limparPesquisaButton}
+              >
+                <FontAwesome name="times" size={14} color="#666" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         <View style={style.linhaDivisoria} />
 
-        {/* Lista de produtos */}
+        {/* Mostra mensagem quando não encontra resultados */}
+        {produtosFiltrados.length === 0 && (
+          <View style={style.noResultsContainer}>
+            <FontAwesome name="search" size={40} color="#ccc" />
+            <Text style={style.noResultsText}>
+              Nenhum conjunto encontrado para sua pesquisa.
+            </Text>
+            <Text style={style.noResultsSubText}>
+              Tente outros termos ou limpe os filtros.
+            </Text>
+            <TouchableOpacity 
+              style={style.botaoLimparPesquisa}
+              onPress={limparFiltros}
+            >
+              <Text style={style.textoBotaoLimparPesquisa}>Limpar Pesquisa e Filtros</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Lista de conjuntos FILTRADOS */}
         {produtosFiltrados.map((produto) => (
           <View key={produto.id} style={style.produtoContainer}>
             <View style={style.imagemContainer}>
@@ -190,7 +284,11 @@ export default function  Conjunto() {
                 ou 12x de {formatarPreco(produto.preco / 12)}
               </Text>
 
-              <TouchableOpacity style={style.botaoEscolher}>
+              {/* Botão atualizado com navegação */}
+              <TouchableOpacity 
+                style={style.botaoEscolher}
+                onPress={() => navegarParaProduto(produto.rota)}
+              >
                 <Text style={style.textoBotao}>Escolher</Text>
               </TouchableOpacity>
             </View>
@@ -203,7 +301,7 @@ export default function  Conjunto() {
         <ParteDeBaixo />
       </ScrollView>
 
-      {/* Modal de Filtro Simplificado */}
+      {/* Modal de Filtro */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -214,7 +312,7 @@ export default function  Conjunto() {
           <View style={style.modalContent}>
             {/* Header do Modal */}
             <View style={style.modalHeader}>
-              <Text style={style.modalTitle}>Filtrar Produtos</Text>
+              <Text style={style.modalTitle}>Filtrar Conjuntos</Text>
               <TouchableOpacity 
                 onPress={() => setModalFiltroVisible(false)}
                 style={style.botaoFechar}
@@ -248,9 +346,9 @@ export default function  Conjunto() {
               ))}
             </View>
 
-            {/* Subcategorias */}
+            {/* Subcategorias DE CONJUNTOS */}
             <View style={style.secaoFiltro}>
-              <Text style={style.tituloSecao}>Subcategorias</Text>
+              <Text style={style.tituloSecao}>Tipos de Conjuntos</Text>
               {opcoesSubcategorias.map((opcao, index) => (
                 <TouchableOpacity 
                   key={index}
@@ -279,7 +377,7 @@ export default function  Conjunto() {
                 style={style.botaoLimpar}
                 onPress={limparFiltros}
               >
-                <Text style={style.textoBotaoLimpar}>Limpar</Text>
+                <Text style={style.textoBotaoLimpar}>Limpar Tudo</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 

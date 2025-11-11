@@ -37,5 +37,57 @@ export const style = StyleSheet.create({
 textoNegrito: {
   fontWeight: 'bold',
 },
+linhasContainer: {
+  padding: 20,
+  backgroundColor: '#f8f8f8',
+  marginTop: 20,
+  borderRadius: 10,
+  marginHorizontal: 15,
+},
+
+linhasTitulo: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#333',
+  textAlign: 'center',
+  marginBottom: 15,
+},
+
+linhasBotoes: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  flexWrap: 'wrap',
+},
+
+botaoLinha: {
+  flex: 1,
+  minWidth: '30%',
+  paddingVertical: 12,
+  paddingHorizontal: 8,
+  borderRadius: 8,
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginHorizontal: 4,
+  marginBottom: 8,
+},
+
+botaoMasculina: {
+  backgroundColor: '#C00000', // Vermelho do Vasco
+},
+
+botaoFeminina: {
+  backgroundColor: '#FF6B9E', // Rosa para linha feminina
+},
+
+botaoConjunto: {
+  backgroundColor: '#4CAF50', // Verde para conjuntos
+},
+
+textoBotaoLinha: {
+  color: '#fff',
+  fontSize: 12,
+  fontWeight: 'bold',
+  textAlign: 'center',
+},
 
 }); 

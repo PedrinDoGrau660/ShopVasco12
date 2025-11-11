@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView, Modal } from "react-native";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import ParteDeCima from "../../PartesFixas/TopDoApp/top";
+import ParteDeCima from "../../PartesFixas/TopDasLinhas/top";
 import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
@@ -16,10 +16,11 @@ import jaquetaImagem from '../../assets/dvd.jpg';
 import meiaoImagem from '../../assets/dvd.jpg';
 import moletomImagem from '../../assets/dvd.jpg';
 
-type HomeRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
+// Defina as props corretamente
+type LinhaMasculinaRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
 
 type Props = {
-  route: HomeRouteProp;
+  route: LinhaMasculinaRouteProp;
 };
 
 type Produto = {
@@ -28,13 +29,19 @@ type Produto = {
   preco: number;
   precoOriginal?: number;
   subcategoria: string;
-  imagem: any; // Imagem específica do produto
+  imagem: any;
+  rota: keyof StackParamList;
 };
 
-export default function LinhaMasculina() {
+export default function LinhaMasculina({ route }: Props) {
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
   const [modalFiltroVisible, setModalFiltroVisible] = useState(false);
   const [classificacaoSelecionada, setClassificacaoSelecionada] = useState("Nome do Produto");
   const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState("Todas");
+  
+  // ESTADO PARA PRODUTOS FILTRADOS (PESQUISA + FILTROS)
+  const [produtosFiltrados, setProdutosFiltrados] = useState<Produto[]>([]);
+  const [termoPesquisa, setTermoPesquisa] = useState(route.params?.searchTerm || "");
 
   const opcoesClassificacao = [
     "Nome do Produto",
@@ -53,65 +60,106 @@ export default function LinhaMasculina() {
     "TREINO"
   ];
 
-  // Dados de produtos com imagens específicas
+  // Dados de produtos com rotas específicas
   const produtos: Produto[] = [
     { 
       id: 1, 
       nome: "CALÇA AQUECIMENTO COMISSÃO VASCO 25", 
-      preco: 319.99, 
-      precoOriginal: 399.99, 
+      preco: 379.99, 
       subcategoria: "AQUECIMENTO", 
-      imagem: calcaImagem 
+      imagem: calcaImagem,
+      rota: "CalcaAquecimento"
     },
     { 
       id: 2, 
       nome: "CAMISETA TREINO VASCO 2024", 
       preco: 199.99, 
       subcategoria: "TREINO", 
-      imagem: camisetaImagem 
+      imagem: camisetaImagem,
+      rota: "CamisetaTreino"
     },
     { 
       id: 3, 
       nome: "SHORTS JOGO VASCO PRINCIPAL", 
       preco: 159.99, 
       subcategoria: "UNIFORME DE JOGO", 
-      imagem: shortsImagem 
+      imagem: shortsImagem,
+      rota: "ShortsJogo"
     },
     { 
       id: 4, 
       nome: "JAQUETA INVERNO VASCO", 
-      preco: 279.99, 
-      precoOriginal: 349.99, 
+      preco: 349.99, 
       subcategoria: "INVERNO", 
-      imagem: jaquetaImagem 
+      imagem: jaquetaImagem,
+      rota: "JaquetaInverno"
     },
     { 
       id: 5, 
       nome: "MEIÃO OFICIAL VASCO", 
       preco: 49.99, 
       subcategoria: "MEIÃO", 
-      imagem: meiaoImagem 
+      imagem: meiaoImagem,
+      rota: "MeiaoOficial"
     },
     { 
       id: 6, 
       nome: "MOLETOM CASUAL VASCO", 
       preco: 229.99, 
       subcategoria: "CASUAL", 
-      imagem: moletomImagem 
+      imagem: moletomImagem,
+      rota: "MoletomCasual"
     },
   ];
 
-  // Função para aplicar filtros
-  const produtosFiltrados = produtos
-    .filter(produto => {
-      // Filtro por subcategoria
-      if (subcategoriaSelecionada !== "Todas" && produto.subcategoria !== subcategoriaSelecionada) {
-        return false;
-      }
-      return true;
-    })
-    .sort((a, b) => {
-      // Ordenação simples
+  // FUNÇÃO PARA LIDAR COM A PESQUISA
+  const handleSearch = (searchText: string) => {
+    setTermoPesquisa(searchText);
+    
+    if (!searchText.trim()) {
+      // Se a pesquisa estiver vazia, aplica apenas os filtros atuais
+      aplicarFiltrosEModal();
+      return;
+    }
+
+    // Filtra os produtos baseado no texto da pesquisa
+    const filtered = produtos.filter(produto =>
+      produto.nome.toLowerCase().includes(searchText.toLowerCase()) ||
+      produto.subcategoria.toLowerCase().includes(searchText.toLowerCase())
+    );
+    
+    // Aplica ordenação nos produtos filtrados
+    const filteredAndSorted = aplicarOrdenacao(filtered);
+    setProdutosFiltrados(filteredAndSorted);
+  };
+
+  // FUNÇÃO PARA APLICAR FILTROS E ORDENAÇÃO
+  const aplicarFiltrosEModal = () => {
+    let filtered = produtos;
+
+    // Filtro por subcategoria
+    if (subcategoriaSelecionada !== "Todas") {
+      filtered = filtered.filter(produto => 
+        produto.subcategoria === subcategoriaSelecionada
+      );
+    }
+
+    // Filtro por pesquisa (se houver termo)
+    if (termoPesquisa.trim()) {
+      filtered = filtered.filter(produto =>
+        produto.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
+        produto.subcategoria.toLowerCase().includes(termoPesquisa.toLowerCase())
+      );
+    }
+
+    // Aplica ordenação
+    const filteredAndSorted = aplicarOrdenacao(filtered);
+    setProdutosFiltrados(filteredAndSorted);
+  };
+
+  // FUNÇÃO PARA APLICAR ORDENAÇÃO
+  const aplicarOrdenacao = (produtosParaOrdenar: Produto[]) => {
+    return [...produtosParaOrdenar].sort((a, b) => {
       switch (classificacaoSelecionada) {
         case "Menor Preço":
           return a.preco - b.preco;
@@ -121,23 +169,51 @@ export default function LinhaMasculina() {
           return a.nome.localeCompare(b.nome);
       }
     });
+  };
+
+  // Função para navegar para a página do produto
+  const navegarParaProduto = (rota: keyof StackParamList) => {
+    navigation.navigate(rota as any);
+  };
 
   const aplicarFiltros = () => {
+    aplicarFiltrosEModal();
     setModalFiltroVisible(false);
   };
 
   const limparFiltros = () => {
     setClassificacaoSelecionada("Nome do Produto");
     setSubcategoriaSelecionada("Todas");
+    setTermoPesquisa("");
+    // Atualiza ParteDeCima com pesquisa vazia
+    handleSearch("");
   };
 
   const formatarPreco = (preco: number) => {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
   };
 
+  // UseEffect para aplicar a pesquisa quando o componente montar ou quando receber parâmetros
+  useEffect(() => {
+    if (route.params?.searchTerm) {
+      handleSearch(route.params.searchTerm);
+    } else {
+      aplicarFiltrosEModal();
+    }
+  }, [route.params?.searchTerm]);
+
+  // Inicializa os produtos filtrados quando o componente monta
+  useEffect(() => {
+    aplicarFiltrosEModal();
+  }, []);
+
   return (
     <View style={style.container}>
-      <ParteDeCima />
+      {/* ParteDeCima com barra de pesquisa */}
+      <ParteDeCima onSearch={handleSearch} showSearchBar={true} />
+
+      
+      
       <ScrollView 
         style={style.scrollView}
         showsVerticalScrollIndicator={false}
@@ -154,11 +230,45 @@ export default function LinhaMasculina() {
             <FontAwesome name="filter" size={16} color="#fff" />
             <Text style={style.textoBotaoFiltrar}>Filtrar</Text>
           </TouchableOpacity>
+          
+          {/* Mostra termo de pesquisa atual */}
+          {termoPesquisa && (
+            <View style={style.pesquisaAtivaContainer}>
+              <Text style={style.pesquisaAtivaText}>
+                Pesquisando por: "{termoPesquisa}"
+              </Text>
+              <TouchableOpacity 
+                onPress={() => handleSearch("")}
+                style={style.limparPesquisaButton}
+              >
+                <FontAwesome name="times" size={14} color="#666" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         <View style={style.linhaDivisoria} />
 
-        {/* Lista de produtos */}
+        {/* Mostra mensagem quando não encontra resultados */}
+        {produtosFiltrados.length === 0 && (
+          <View style={style.noResultsContainer}>
+            <FontAwesome name="search" size={40} color="#ccc" />
+            <Text style={style.noResultsText}>
+              Nenhum produto encontrado para sua pesquisa.
+            </Text>
+            <Text style={style.noResultsSubText}>
+              Tente outros termos ou limpe os filtros.
+            </Text>
+            <TouchableOpacity 
+              style={style.botaoLimparPesquisa}
+              onPress={limparFiltros}
+            >
+              <Text style={style.textoBotaoLimparPesquisa}>Limpar Pesquisa e Filtros</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Lista de produtos FILTRADOS */}
         {produtosFiltrados.map((produto) => (
           <View key={produto.id} style={style.produtoContainer}>
             <View style={style.imagemContainer}>
@@ -190,7 +300,11 @@ export default function LinhaMasculina() {
                 ou 12x de {formatarPreco(produto.preco / 12)}
               </Text>
 
-              <TouchableOpacity style={style.botaoEscolher}>
+              {/* Botão atualizado com navegação */}
+              <TouchableOpacity 
+                style={style.botaoEscolher}
+                onPress={() => navegarParaProduto(produto.rota)}
+              >
                 <Text style={style.textoBotao}>Escolher</Text>
               </TouchableOpacity>
             </View>
@@ -203,7 +317,7 @@ export default function LinhaMasculina() {
         <ParteDeBaixo />
       </ScrollView>
 
-      {/* Modal de Filtro Simplificado */}
+      {/* Modal de Filtro */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -279,7 +393,7 @@ export default function LinhaMasculina() {
                 style={style.botaoLimpar}
                 onPress={limparFiltros}
               >
-                <Text style={style.textoBotaoLimpar}>Limpar</Text>
+                <Text style={style.textoBotaoLimpar}>Limpar Tudo</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 

@@ -16,14 +16,40 @@ import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
 
 // Props para o componente ParteDeCima
+interface ParteDeCimaProps {
+  children?: React.ReactNode;
+  onSearch?: (searchText: string) => void;
+  showSearchBar?: boolean;
+}
 
-
-export default function ParteDeCima() {
+export default function ParteDeCima({ children, onSearch, showSearchBar = true }: ParteDeCimaProps) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+  const [searchText, setSearchText] = useState("");
 
   // Função para lidar com a pesquisa
+  const handleSearch = () => {
+    if (onSearch) {
+      onSearch(searchText.trim());
+    }
+  };
 
-  // Função para limpar a pesquisa
+  // Função para limpar a pesquisa - CORRIGIDA
+  const handleClearSearch = () => {
+    setSearchText("");
+    if (onSearch) {
+      onSearch(""); // Isso vai disparar a pesquisa com string vazia
+    }
+  };
+
+  // Função para quando o texto muda - NOVA FUNÇÃO
+  const handleTextChange = (text: string) => {
+    setSearchText(text);
+    
+    // Se o usuário apagar tudo, pesquisa automaticamente com string vazia
+    if (text === "" && onSearch) {
+      onSearch("");
+    }
+  };
 
   return (
     <View>
@@ -58,7 +84,32 @@ export default function ParteDeCima() {
       </View>
 
       {/* Barra de Pesquisa */}
+      {showSearchBar && (
+        <View style={Top.searchContainer}>
+          <View style={Top.searchInputContainer}>
+            <FontAwesome name="search" size={18} color="#666" style={Top.searchIcon} />
+            <TextInput
+              style={Top.searchInput}
+              placeholder="Pesquisar camisas, calças, shorts..."
+              placeholderTextColor="#999"
+              value={searchText}
+              onChangeText={handleTextChange} // Alterado para handleTextChange
+              onSubmitEditing={handleSearch}
+              returnKeyType="search"
+            />
+            {searchText.length > 0 && (
+              <TouchableOpacity onPress={handleClearSearch} style={Top.clearButton}>
+                <FontAwesome name="times-circle" size={18} color="#666" />
+              </TouchableOpacity>
+            )}
+          </View>
+          <TouchableOpacity style={Top.searchButton} onPress={handleSearch}>
+            <Text style={Top.searchButtonText}>Buscar</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
+      {children}
     </View>
   );
 }
