@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// ParteDeCima/styletop.tsx
+import React from "react";
 import { 
   View, 
   Text, 
@@ -11,19 +12,16 @@ import {
 import { Top } from "./styletop"
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Adicionei Ionicons aqui
 import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
 
-// Props para o componente ParteDeCima
+type Props = {
+  onPerfilPress?: () => void;
+};
 
-
-export default function ParteDeCima() {
+export default function ParteDeCima({ onPerfilPress }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
-
-  // Função para lidar com a pesquisa
-
-  // Função para limpar a pesquisa
 
   return (
     <View>
@@ -47,6 +45,9 @@ export default function ParteDeCima() {
         <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
           <FontAwesome name="telegram" size={22} color="#fff" />
         </TouchableOpacity>
+        <TouchableOpacity onPress={onPerfilPress}>
+          <Ionicons name="person-circle" size={28} color="#ffffffff" />
+        </TouchableOpacity>
       </View>
 
       {/* Header Principal */}
@@ -56,9 +57,6 @@ export default function ParteDeCima() {
         <Text style={Top.titleright}>Vasco</Text>
         <Image source={Logo} style={Top.Logo} />
       </View>
-
-      {/* Barra de Pesquisa */}
-
     </View>
   );
 }
