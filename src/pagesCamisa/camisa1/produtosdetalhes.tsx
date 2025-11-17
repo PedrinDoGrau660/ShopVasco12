@@ -6,9 +6,10 @@ import {
   Linking, 
   TouchableOpacity, 
   Image, 
-  ScrollView 
+  ScrollView,
+  Alert 
 } from "react-native";
-import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
+import { RouteProp, useRoute, useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
 import CarouselCamisa from "../../pageHome/Carousel/CarouselCamisas1";
 import ParteDeCima from "../../PartesFixas/TopDoApp/top";
@@ -18,13 +19,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import Cores from "../bolinhas/BolinhasDaCor/index";
 import Tamanho from "../bolinhas/BolinhasDoTamanho/index";
 import FreteCalculator from "../frete/index";
-import { camisas, Camisa } from "../../data/camisaHomen";
+import { camisas, Camisa } from "../../data/camisa";
+import { useCart } from "../../contexts/CartContext"; // IMPORTE O CARRINHO
 
 type RouteProps = RouteProp<StackParamList, "CamisaDetalhes">;
 
 // Versão SIMPLIFICADA do componente
 const ProdutoRelacionado = ({ produto }: { produto: Camisa }) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
 
   const handleEscolher = () => {
     navigation.navigate("CamisaDetalhes", { camisaId: produto.id });
@@ -55,9 +57,12 @@ const ProdutoRelacionado = ({ produto }: { produto: Camisa }) => {
 
 export default function CamisaDetalhes() {
   const route = useRoute<RouteProps>();
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
   const { camisaId } = route.params;
+  const { addToCart } = useCart(); // USE O CARRINHO
   
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
 
   const camisa = camisas.find(c => c.id === camisaId);
 
@@ -65,7 +70,47 @@ export default function CamisaDetalhes() {
     if (camisa && camisa.cores.length > 0) {
       setSelectedColor(camisa.cores[0]);
     }
+    if (camisa && camisa.tamanhos.length > 0) {
+      setSelectedSize(camisa.tamanhos[0]);
+    }
   }, [camisa]);
+
+  // FUNÇÃO PARA ADICIONAR AO CARRINHO
+  const handleAddToCart = () => {
+    if (!camisa) return;
+
+    const cartItem = {
+      id: camisa.id,
+      nome: camisa.nome,
+      preco: camisa.preco,
+      precoDesconto: camisa.precoDesconto,
+      imagem: camisa.imagens[0],
+      cor: selectedColor,
+      tamanho: selectedSize
+    };
+
+    addToCart(cartItem);
+    
+    Alert.alert(
+      'Produto adicionado!',
+      `${camisa.nome} (${selectedColor}) foi adicionado ao carrinho.`,
+      [
+        { text: 'Continuar Comprando', style: 'cancel' },
+        { text: 'Ver Carrinho', onPress: () => navigation.navigate('Carrinho') }
+      ]
+    );
+  };
+
+  // FUNÇÃO PARA COMPRAR DIRETO (VIA WHATSAPP)
+  const handleBuyNow = () => {
+    if (!camisa) return;
+
+    const mensagem = `Olá! Gostaria de comprar o produto:\n\n${
+      `${camisa.nome} - Cor: ${selectedColor} - Tamanho: ${selectedSize} - R$ ${camisa.preco.toFixed(2)}`
+    }`;
+
+    Linking.openURL(`https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`);
+  };
 
   if (!camisa) {
     return (
@@ -81,51 +126,75 @@ export default function CamisaDetalhes() {
     setSelectedColor(colorName);
   };
 
-  // VERSÃO SIMPLIFICADA - comente tudo e vá descomentando
+  const handleSizeSelect = (size: string) => {
+    setSelectedSize(size);
+  };
+
   return (
     <View style={style.container}>
       <ParteDeCima />
       <ScrollView style={style.content} showsVerticalScrollIndicator={false}>
         
-        {/* 1. Teste apenas o carousel */}
+        {/* Carousel de imagens */}
         <CarouselCamisa imagens={camisa.imagens} />
         
-        {/* 2. Depois adicione o título */}
+        {/* Informações do produto */}
         <View style={style.textContainer}>
           <Text style={style.productTitle}>{camisa.nome}</Text>
         </View>
         
-        {/* 3. Adicione os botões de novidade/destaque */}
-        
-        {/* 4. Adicione o preço */}
+        {/* Preço */}
         <View style={style.textContainer}>
           <Text style={style.productpreço}>R$ {camisa.preco.toFixed(2)}</Text>
           <Text style={style.descriçaoPreco}>{camisa.descricaoPreco}</Text>
         </View>
         
-        {/* 5. Adicione cores e tamanhos */}
-        <Cores cores={camisa.cores} onColorSelect={handleColorSelect} />
-        <Tamanho tamanhos={camisa.tamanhos} />
+        {/* Cores e Tamanhos */}
+     <Cores 
+  cores={camisa.cores} 
+  onColorSelect={handleColorSelect}
+/>
+        <Tamanho 
+          tamanhos={camisa.tamanhos} 
+          onSizeSelect={handleSizeSelect}
+          selectedSize={selectedSize}
+        />
         
-        {/* 6. Adicione o botão comprar */}
-        <View style={{ flex: 1 }}>
+        {/* BOTÕES DE AÇÃO ATUALIZADOS */}
+        <View style={style.botoesAcaoContainer}>
+          {/* Botão Adicionar ao Carrinho */}
           <TouchableOpacity
-            onPress={() => Linking.openURL("https://whatsapp.com")}
-            style={style.BotaoCarrinho}
+            onPress={handleAddToCart}
+            style={[style.BotaoCarrinho, { backgroundColor: '#fff', borderWidth: 1, borderColor: '#C00000' }]}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="shopping-cart" size={16} color="black" />
-              <Text style={{ marginLeft: 5 }}>Comprar - {selectedColor}</Text>
+              <FontAwesome name="shopping-cart" size={16} color="#C00000" />
+              <Text style={{ marginLeft: 5, color: '#C00000' }}>
+                Adicionar ao Carrinho
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Botão Comprar Agora */}
+          <TouchableOpacity
+            onPress={handleBuyNow}
+            style={[style.BotaoCarrinho, { backgroundColor: '#C00000' }]}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <FontAwesome name="whatsapp" size={16} color="#fff" />
+              <Text style={{ marginLeft: 5, color: '#fff' }}>
+                Comprar Agora - {selectedColor}
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
         
-        {/* 7. Adicione o frete */}
+        {/* Frete */}
         <View style={{ borderBottomColor: '#ccc', borderBottomWidth: 1, marginVertical: 10 }} />
         <FreteCalculator />
         <View style={{ borderBottomColor: '#ccc', borderBottomWidth: 1, marginVertical: 10 }} />
 
-        {/* 8. Adicione produtos relacionados */}
+        {/* Produtos relacionados */}
         <Text style={style.tituloOutrosProdutos}>Outros Produtos</Text>
 
         {camisas

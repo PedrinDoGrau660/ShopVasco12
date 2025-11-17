@@ -22,6 +22,21 @@ export const style = StyleSheet.create({
   BotaoRedondo :{
    flexDirection: "row",
   },
+  botoesAcaoContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  gap: 10,
+  marginVertical: 15,
+  paddingHorizontal: 10,
+},
+BotaoCarrinho: {
+  flex: 1,
+  padding: 15,
+  borderRadius: 8,
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 50,
+},
   BotaoDestaque:{
   paddingHorizontal: 10,
   backgroundColor: 'gray',
@@ -68,20 +83,7 @@ export const style = StyleSheet.create({
     color: "#ffffffff",
        paddingHorizontal: 5,
   },
-   BotaoCarrinho: {
-  flexDirection: "row",
-  alignItems: "center",
-  paddingHorizontal: 15,
-  paddingVertical: 10,
-  backgroundColor: "white",
-  borderRadius: 16,
-  alignSelf: "flex-start",
-  marginTop: 15,     // distância das bolinhas
-  marginLeft: 5,    // um espacinho da borda
-  elevation: 5,
-  fontWeight: "bold",
-  fontSize: 16,
-},
+  
 input: {
     width: "15%",
     height: 50,

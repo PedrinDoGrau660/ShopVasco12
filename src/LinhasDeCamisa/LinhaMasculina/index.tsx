@@ -7,7 +7,7 @@ import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
-import { camisas, Camisa } from "../../data/camisaHomen"; // IMPORTE OS DADOS
+import { camisas, Camisa } from "../../data/camisa"; // IMPORTE OS DADOS
 
 type LinhaMasculinaRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
 
@@ -123,16 +123,14 @@ const navegarParaProduto = (produtoId: number) => {
 
   // UseEffects
   useEffect(() => {
-    if (route.params?.searchTerm) {
-      handleSearch(route.params.searchTerm);
-    } else {
-      aplicarFiltrosEModal();
-    }
-  }, [route.params?.searchTerm]);
+  aplicarFiltrosEModal();
+}, [classificacaoSelecionada, subcategoriaSelecionada]);
 
-  useEffect(() => {
-    aplicarFiltrosEModal();
-  }, []);
+useEffect(() => {
+  if (route.params?.searchTerm) {
+    handleSearch(route.params.searchTerm);
+  }
+}, [route.params?.searchTerm]);
 
   return (
     <View style={style.container}>

@@ -7,7 +7,7 @@ import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
-import { camisas, Camisa } from "../../data/conjunto"; // IMPORTE DO ARQUIVO ÚNICO
+import { camisas, Camisa } from "../../data/camisa"; // IMPORTE DO ARQUIVO ÚNICO
 
 type ConjuntoRouteProp = RouteProp<StackParamList, "Conjunto">;
 
@@ -123,16 +123,14 @@ export default function Conjunto({ route }: Props) {
 
   // UseEffects
   useEffect(() => {
-    if (route.params?.searchTerm) {
-      handleSearch(route.params.searchTerm);
-    } else {
-      aplicarFiltrosEModal();
-    }
-  }, [route.params?.searchTerm]);
+  aplicarFiltrosEModal();
+}, [classificacaoSelecionada, subcategoriaSelecionada]); // Reaplica quando filtros mudam
 
-  useEffect(() => {
-    aplicarFiltrosEModal();
-  }, []);
+useEffect(() => {
+  if (route.params?.searchTerm) {
+    handleSearch(route.params.searchTerm);
+  }
+}, [route.params?.searchTerm]);
 
   return (
     <View style={style.container}>

@@ -12,6 +12,7 @@ import LinhaFeminina from "../LinhasDeCamisa/LinhaFeminina";
 import Conjunto from "../LinhasDeCamisa/Conjunto";
 import NoticiaDetalhes from "../screens/NoticiaDetalhes/NoticiaDetalhes";
 import Perfil from "../screens/Perfil/perfil"; 
+import CartScreen from "../screens/CartScreen";
 
 // MANTENHA ESTA - é a página dinâmica
 import CamisaDetalhes from "../pagesCamisa/camisa1/produtosdetalhes";
@@ -32,6 +33,7 @@ export type StackParamList = {
   NoticiaDetalhes: { noticiaId: string };
   Perfil: undefined;
   CamisaDetalhes: { camisaId: number }; 
+   Carrinho: undefined;
 
   Home: {
     email?: string;
@@ -69,6 +71,11 @@ export default function Routes() {
       <Stack.Screen name="Conjunto" component={Conjunto} />
       <Stack.Screen name="NoticiaDetalhes" component={NoticiaDetalhes} />
       <Stack.Screen name="Perfil" component={Perfil} />
+      <Stack.Screen 
+        name="Carrinho" 
+        component={CartScreen} 
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

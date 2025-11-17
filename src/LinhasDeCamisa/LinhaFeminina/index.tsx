@@ -7,7 +7,7 @@ import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
-import { camisas, Camisa } from "../../data/camisaMulher"; // IMPORTE DO ARQUIVO ÚNICO
+import { camisas, Camisa } from "../../data/camisa"; // IMPORTE DO ARQUIVO ÚNICO
 
 type LinhaFemininaRouteProp = RouteProp<StackParamList, "LinhaFeminina">;
 
@@ -124,16 +124,14 @@ export default function LinhaFeminina({ route }: Props) {
 
   // UseEffects
   useEffect(() => {
-    if (route.params?.searchTerm) {
-      handleSearch(route.params.searchTerm);
-    } else {
-      aplicarFiltrosEModal();
-    }
-  }, [route.params?.searchTerm]);
+  aplicarFiltrosEModal();
+}, [classificacaoSelecionada, subcategoriaSelecionada]);
 
-  useEffect(() => {
-    aplicarFiltrosEModal();
-  }, []);
+useEffect(() => {
+  if (route.params?.searchTerm) {
+    handleSearch(route.params.searchTerm);
+  }
+}, [route.params?.searchTerm]);
 
   return (
     <View style={style.container}>

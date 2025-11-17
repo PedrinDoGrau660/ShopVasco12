@@ -15,6 +15,7 @@ import { StackParamList } from "../../routes/index.routes";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
+import { useCart } from "../../contexts/CartContext"; // IMPORTE O CARRINHO
 
 type Props = {
   onPerfilPress?: () => void;
@@ -22,6 +23,7 @@ type Props = {
 
 export default function ParteDeCima({ onPerfilPress }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+  const { getTotalItems } = useCart(); // USE O CARRINHO
 
   const handlePerfilPress = () => {
     if (onPerfilPress) {
@@ -30,6 +32,11 @@ export default function ParteDeCima({ onPerfilPress }: Props) {
       // Navega para a tela de perfil por padrão
       navigation.navigate('Perfil');
     }
+  };
+
+  // Função para navegar para o carrinho
+  const handleCarrinhoPress = () => {
+    navigation.navigate('Carrinho');
   };
 
   return (
@@ -51,9 +58,36 @@ export default function ParteDeCima({ onPerfilPress }: Props) {
         <TouchableOpacity onPress={() => Linking.openURL("https://vk.com")}>
           <FontAwesome name="vk" size={22} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
-          <FontAwesome name="telegram" size={22} color="#fff" />
+        
+        {/* SUBSTITUÍDO: Telegram por Carrinho */}
+        <TouchableOpacity onPress={handleCarrinhoPress} style={{ position: 'relative' }}>
+          <FontAwesome name="shopping-cart" size={22} color="#fff" />
+          {getTotalItems() > 0 && (
+            <View style={{
+              position: 'absolute',
+              right: -8,
+              top: -8,
+              backgroundColor: 'red',
+              borderRadius: 10,
+              minWidth: 20,
+              height: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 2,
+              borderColor: '#000'
+            }}>
+              <Text style={{ 
+                color: 'white', 
+                fontSize: 12, 
+                fontWeight: 'bold',
+                textAlign: 'center'
+              }}>
+                {getTotalItems()}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
+        
         <TouchableOpacity onPress={handlePerfilPress}>
           <Ionicons name="person-circle" size={28} color="#ffffffff" />
         </TouchableOpacity>

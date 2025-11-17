@@ -4,13 +4,18 @@ import { style } from "./style";
 
 interface Props {
   tamanhos: string[]; // Recebe os tamanhos como prop
+  onSizeSelect?: (size: string) => void;
+  selectedSize?: string;
 }
 
-export default function Tamanho({ tamanhos }: Props) {
-  const [selectedSize, setSelectedSize] = useState(tamanhos[0] || "");
+export default function Tamanho({ tamanhos, onSizeSelect, selectedSize }: Props) {
+  const [sizeSelecionado, setSizeSelecionado] = useState(selectedSize || tamanhos[0] || "");
 
   const handleSizeSelect = (sizeName: string) => {
-    setSelectedSize(sizeName);
+    setSizeSelecionado(sizeName);
+    if (onSizeSelect) {
+      onSizeSelect(sizeName); // Corrigido: era 'tamanho', deve ser 'sizeName'
+    }
   };
 
   // Se não houver tamanhos, não renderiza nada
@@ -21,7 +26,7 @@ export default function Tamanho({ tamanhos }: Props) {
   return (
     <View style={style.container}>
       <View style={style.sizesSection}>
-        <Text style={style.sizesTitle}>Tamanhos Disponíveis ({selectedSize})</Text>
+        <Text style={style.sizesTitle}>Tamanhos Disponíveis ({sizeSelecionado})</Text>
         
         <ScrollView 
           horizontal 
@@ -34,17 +39,17 @@ export default function Tamanho({ tamanhos }: Props) {
               key={index}
               style={[
                 style.sizeOption,
-                selectedSize === size && style.sizeOptionSelected
+                sizeSelecionado === size && style.sizeOptionSelected
               ]}
               onPress={() => handleSizeSelect(size)}
             >
               <Text style={[
                 style.sizeText,
-                selectedSize === size && style.sizeTextSelected
+                sizeSelecionado === size && style.sizeTextSelected
               ]}>
                 {size}
               </Text>
-              {selectedSize === size && (
+              {sizeSelecionado === size && (
                 <Text style={style.sizeCheckmark}>✓</Text>
               )}
             </TouchableOpacity>
