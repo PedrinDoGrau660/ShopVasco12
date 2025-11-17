@@ -12,7 +12,7 @@ import {
 import { Top } from "./styletop"
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Adicionei Ionicons aqui
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
 
@@ -22,6 +22,15 @@ type Props = {
 
 export default function ParteDeCima({ onPerfilPress }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+
+  const handlePerfilPress = () => {
+    if (onPerfilPress) {
+      onPerfilPress();
+    } else {
+      // Navega para a tela de perfil por padrão
+      navigation.navigate('Perfil');
+    }
+  };
 
   return (
     <View>
@@ -45,7 +54,7 @@ export default function ParteDeCima({ onPerfilPress }: Props) {
         <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
           <FontAwesome name="telegram" size={22} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onPerfilPress}>
+        <TouchableOpacity onPress={handlePerfilPress}>
           <Ionicons name="person-circle" size={28} color="#ffffffff" />
         </TouchableOpacity>
       </View>

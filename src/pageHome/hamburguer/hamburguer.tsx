@@ -7,12 +7,18 @@ import {
   StyleSheet,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native"; // 👈 Importação essencial
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const MENU_WIDTH = width * 0.7;
 
-export default function Hamburguer() {
+// Interface para as props
+interface HamburguerProps {
+  color?: string;
+  top?: number; // 👈 Nova prop para posição
+}
+
+export default function Hamburguer({ color = "#fff", top = 20 }: HamburguerProps) {
   const [menuAberto, setMenuAberto] = useState(false);
   const slideAnim = useRef(new Animated.Value(-MENU_WIDTH)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -50,24 +56,24 @@ export default function Hamburguer() {
       }),
     ]).start(() => {
       setMenuAberto(false);
-      navigation.navigate(tela as never); // 👈 Navega para a tela desejada
+      navigation.navigate(tela as never);
     });
   };
 
   return (
     <>
-      {/* Ícone do menu no header */}
+      {/* Ícone do menu no header - AGORA COM PROP DE COR E POSIÇÃO */}
       <TouchableOpacity
         onPress={alternarMenu}
         style={{
           position: "absolute",
           left: 20,
-          top: 20,
+          top: top, // 👈 Usando a prop aqui
           zIndex: 20,
           elevation: 20,
         }}
       >
-        <FontAwesome name="bars" size={22} color="#fff" />
+        <FontAwesome name="bars" size={22} color={color} />
       </TouchableOpacity>
 
       {/* Fundo escuro */}
@@ -102,7 +108,7 @@ export default function Hamburguer() {
         <Text style={styles.title}>⚔️ Vasco App</Text>
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("Home")}>
-          <Text style={styles.text}>🏠 Início</Text>
+          <Text style={styles.text}>Início</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("LinhaFeminina")}>
@@ -113,13 +119,12 @@ export default function Hamburguer() {
           <Text style={styles.text}>Linha Masculina</Text>
         </TouchableOpacity>
 
-           <TouchableOpacity style={styles.item} onPress={() => navegarPara("Conjunto")}>
+        <TouchableOpacity style={styles.item} onPress={() => navegarPara("Conjunto")}>
           <Text style={styles.text}>Conjunto</Text>
         </TouchableOpacity>
 
-
-        <TouchableOpacity style={styles.item} onPress={() => navegarPara("Ajuda")}>
-          <Text style={styles.text}>📞 Ajuda</Text>
+        <TouchableOpacity style={styles.item} onPress={() => navegarPara("Perfil")}>
+          <Text style={styles.text}>Perfil</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.item} onPress={() => navegarPara("Login")}>

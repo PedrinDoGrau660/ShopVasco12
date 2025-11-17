@@ -11,7 +11,7 @@ import {
 import { Top } from "./styletop"
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackParamList } from "../../routes/index.routes";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import Hamburguer from "../../pageHome/hamburguer/hamburguer";
 import Logo from "../../assets/forççaaaaa.png";
 
@@ -20,11 +20,26 @@ interface ParteDeCimaProps {
   children?: React.ReactNode;
   onSearch?: (searchText: string) => void;
   showSearchBar?: boolean;
+  onPerfilPress?: () => void;
 }
 
-export default function ParteDeCima({ children, onSearch, showSearchBar = true }: ParteDeCimaProps) {
+export default function ParteDeCima({ 
+  children, 
+  onSearch, 
+  showSearchBar = true, 
+  onPerfilPress 
+}: ParteDeCimaProps) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
   const [searchText, setSearchText] = useState("");
+
+  const handlePerfilPress = () => {
+    if (onPerfilPress) {
+      onPerfilPress();
+    } else {
+      // Navega para a tela de perfil por padrão
+      navigation.navigate('Perfil');
+    }
+  };
 
   // Função para lidar com a pesquisa
   const handleSearch = () => {
@@ -33,15 +48,15 @@ export default function ParteDeCima({ children, onSearch, showSearchBar = true }
     }
   };
 
-  // Função para limpar a pesquisa - CORRIGIDA
+  // Função para limpar a pesquisa
   const handleClearSearch = () => {
     setSearchText("");
     if (onSearch) {
-      onSearch(""); // Isso vai disparar a pesquisa com string vazia
+      onSearch("");
     }
   };
 
-  // Função para quando o texto muda - NOVA FUNÇÃO
+  // Função para quando o texto muda
   const handleTextChange = (text: string) => {
     setSearchText(text);
     
@@ -73,6 +88,9 @@ export default function ParteDeCima({ children, onSearch, showSearchBar = true }
         <TouchableOpacity onPress={() => Linking.openURL("https://t.me")}>
           <FontAwesome name="telegram" size={22} color="#fff" />
         </TouchableOpacity>
+        <TouchableOpacity onPress={handlePerfilPress}>
+          <Ionicons name="person-circle" size={28} color="#ffffffff" />
+        </TouchableOpacity>
       </View>
 
       {/* Header Principal */}
@@ -93,7 +111,7 @@ export default function ParteDeCima({ children, onSearch, showSearchBar = true }
               placeholder="Pesquisar camisas, calças, shorts..."
               placeholderTextColor="#999"
               value={searchText}
-              onChangeText={handleTextChange} // Alterado para handleTextChange
+              onChangeText={handleTextChange}
               onSubmitEditing={handleSearch}
               returnKeyType="search"
             />
