@@ -7,29 +7,12 @@ import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
+import { camisas, Camisa } from "../../data/conjunto"; // IMPORTE DO ARQUIVO ÚNICO
 
-// Importe as imagens reais dos conjuntos
-import conjunto1Imagem from '../../assets/dvd.jpg'; 
-import conjunto2Imagem from '../../assets/dvd.jpg';
-import conjunto3Imagem from '../../assets/dvd.jpg';
-import conjunto4Imagem from '../../assets/dvd.jpg';
-import conjunto5Imagem from '../../assets/dvd.jpg';
-
-// Defina as props corretamente
 type ConjuntoRouteProp = RouteProp<StackParamList, "Conjunto">;
 
 type Props = {
   route: ConjuntoRouteProp;
-};
-
-type Produto = {
-  id: number;
-  nome: string;
-  preco: number;
-  precoOriginal?: number;
-  subcategoria: string;
-  imagem: any;
-  rota: keyof StackParamList;
 };
 
 export default function Conjunto({ route }: Props) {
@@ -38,8 +21,8 @@ export default function Conjunto({ route }: Props) {
   const [classificacaoSelecionada, setClassificacaoSelecionada] = useState("Nome do Produto");
   const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState("Todas");
   
-  // ESTADO PARA PRODUTOS FILTRADOS (PESQUISA + FILTROS)
-  const [produtosFiltrados, setProdutosFiltrados] = useState<Produto[]>([]);
+  // ESTADO PARA PRODUTOS FILTRADOS
+  const [produtosFiltrados, setProdutosFiltrados] = useState<Camisa[]>([]);
   const [termoPesquisa, setTermoPesquisa] = useState(route.params?.searchTerm || "");
 
   const opcoesClassificacao = [
@@ -59,68 +42,30 @@ export default function Conjunto({ route }: Props) {
     "KITS COMPLETOS"
   ];
 
-  // DADOS DE CONJUNTOS COM ROTAS ESPECÍFICAS
-  const produtos: Produto[] = [
-    { 
-      id: 1, 
-      nome: "KIT COMPLETO VASCO 2024", 
-      preco: 599.99, 
-      precoOriginal: 749.99, 
-      subcategoria: "KITS COMPLETOS", 
-      imagem: conjunto1Imagem,
-      rota: "KitCompleto"
-    },
-    { 
-      id: 2, 
-      nome: "CONJUNTO TREINO MASCULINO", 
-      preco: 349.99, 
-      subcategoria: "CONJUNTOS MASCULINOS", 
-      imagem: conjunto2Imagem,
-      rota: "ConjuntoTreinoMasculino"
-    },
-    { 
-      id: 3, 
-      nome: "CONJUNTO FEMININO ELEGANCE", 
-      preco: 429.99, 
-      subcategoria: "CONJUNTOS FEMININOS", 
-      imagem: conjunto3Imagem,
-      rota: "ConjuntoFemininoElegance"
-    },
-    { 
-      id: 4, 
-      nome: "KIT INFANTIL VASCO", 
-      preco: 279.99, 
-      precoOriginal: 349.99, 
-      subcategoria: "CONJUNTOS INFANTIS", 
-      imagem: conjunto4Imagem,
-      rota: "KitInfantil"
-    },
-  ];
+  // FILTRA APENAS CONJUNTOS DO ARQUIVO DE DADOS
+  const produtosConjuntos = camisas.filter(produto => produto.categoria === 'conjunto');
 
   // FUNÇÃO PARA LIDAR COM A PESQUISA
   const handleSearch = (searchText: string) => {
     setTermoPesquisa(searchText);
     
     if (!searchText.trim()) {
-      // Se a pesquisa estiver vazia, aplica apenas os filtros atuais
       aplicarFiltrosEModal();
       return;
     }
 
-    // Filtra os produtos baseado no texto da pesquisa
-    const filtered = produtos.filter(produto =>
+    const filtered = produtosConjuntos.filter(produto =>
       produto.nome.toLowerCase().includes(searchText.toLowerCase()) ||
       produto.subcategoria.toLowerCase().includes(searchText.toLowerCase())
     );
     
-    // Aplica ordenação nos produtos filtrados
     const filteredAndSorted = aplicarOrdenacao(filtered);
     setProdutosFiltrados(filteredAndSorted);
   };
 
   // FUNÇÃO PARA APLICAR FILTROS E ORDENAÇÃO
   const aplicarFiltrosEModal = () => {
-    let filtered = produtos;
+    let filtered = produtosConjuntos;
 
     // Filtro por subcategoria
     if (subcategoriaSelecionada !== "Todas") {
@@ -129,7 +74,7 @@ export default function Conjunto({ route }: Props) {
       );
     }
 
-    // Filtro por pesquisa (se houver termo)
+    // Filtro por pesquisa
     if (termoPesquisa.trim()) {
       filtered = filtered.filter(produto =>
         produto.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
@@ -137,13 +82,12 @@ export default function Conjunto({ route }: Props) {
       );
     }
 
-    // Aplica ordenação
     const filteredAndSorted = aplicarOrdenacao(filtered);
     setProdutosFiltrados(filteredAndSorted);
   };
 
   // FUNÇÃO PARA APLICAR ORDENAÇÃO
-  const aplicarOrdenacao = (produtosParaOrdenar: Produto[]) => {
+  const aplicarOrdenacao = (produtosParaOrdenar: Camisa[]) => {
     return [...produtosParaOrdenar].sort((a, b) => {
       switch (classificacaoSelecionada) {
         case "Menor Preço":
@@ -156,9 +100,9 @@ export default function Conjunto({ route }: Props) {
     });
   };
 
-  // Função para navegar para a página do produto
-  const navegarParaProduto = (rota: keyof StackParamList) => {
-    navigation.navigate(rota as any);
+  // FUNÇÃO ATUALIZADA - Navega para CamisaDetalhes com ID
+  const navegarParaProduto = (produtoId: number) => {
+    navigation.navigate("CamisaDetalhes", { camisaId: produtoId });
   };
 
   const aplicarFiltros = () => {
@@ -170,7 +114,6 @@ export default function Conjunto({ route }: Props) {
     setClassificacaoSelecionada("Nome do Produto");
     setSubcategoriaSelecionada("Todas");
     setTermoPesquisa("");
-    // Atualiza ParteDeCima com pesquisa vazia
     handleSearch("");
   };
 
@@ -178,7 +121,7 @@ export default function Conjunto({ route }: Props) {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
   };
 
-  // UseEffect para aplicar a pesquisa quando o componente montar ou quando receber parâmetros
+  // UseEffects
   useEffect(() => {
     if (route.params?.searchTerm) {
       handleSearch(route.params.searchTerm);
@@ -187,14 +130,12 @@ export default function Conjunto({ route }: Props) {
     }
   }, [route.params?.searchTerm]);
 
-  // Inicializa os produtos filtrados quando o componente monta
   useEffect(() => {
     aplicarFiltrosEModal();
   }, []);
 
   return (
     <View style={style.container}>
-      {/* ParteDeCima com barra de pesquisa */}
       <ParteDeCima onSearch={handleSearch} showSearchBar={true} />
       
       <ScrollView 
@@ -215,7 +156,6 @@ export default function Conjunto({ route }: Props) {
             <Text style={style.textoBotaoFiltrar}>Filtrar</Text>
           </TouchableOpacity>
           
-          {/* Mostra termo de pesquisa atual */}
           {termoPesquisa && (
             <View style={style.pesquisaAtivaContainer}>
               <Text style={style.pesquisaAtivaText}>
@@ -233,7 +173,7 @@ export default function Conjunto({ route }: Props) {
 
         <View style={style.linhaDivisoria} />
 
-        {/* Mostra mensagem quando não encontra resultados */}
+        {/* Mensagem quando não encontra resultados */}
         {produtosFiltrados.length === 0 && (
           <View style={style.noResultsContainer}>
             <FontAwesome name="search" size={40} color="#ccc" />
@@ -252,12 +192,12 @@ export default function Conjunto({ route }: Props) {
           </View>
         )}
 
-        {/* Lista de conjuntos FILTRADOS */}
+        {/* Lista de conjuntos FILTRADOS - AGORA DINÂMICA */}
         {produtosFiltrados.map((produto) => (
           <View key={produto.id} style={style.produtoContainer}>
             <View style={style.imagemContainer}>
               <Image 
-                source={produto.imagem}
+                source={produto.imagens[0]} // USA A PRIMEIRA IMAGEM DO ARRAY
                 style={style.imagemProduto}
                 resizeMode="cover"
               />
@@ -269,25 +209,22 @@ export default function Conjunto({ route }: Props) {
               </Text>
               
               <View style={style.precoContainer}>
-                {produto.precoOriginal && (
-                  <Text style={style.precoOriginal}>
-                    {formatarPreco(produto.precoOriginal)}
-                  </Text>
-                )}
-                <Text style={style.precoPrincipal}>
+                <Text style={style.precoOriginal}>
                   {formatarPreco(produto.preco)}
+                </Text>
+                <Text style={style.precoPrincipal}>
+                  {formatarPreco(produto.precoDesconto)}
                 </Text>
               </View>
               
               <Text style={style.precoParcelado}>
-                {formatarPreco(produto.preco * 0.95)} à vista com desconto Pix{"\n"}
-                ou 12x de {formatarPreco(produto.preco / 12)}
+                {produto.descricaoPreco}
               </Text>
 
-              {/* Botão atualizado com navegação */}
+              {/* Botão atualizado para navegação dinâmica */}
               <TouchableOpacity 
                 style={style.botaoEscolher}
-                onPress={() => navegarParaProduto(produto.rota)}
+                onPress={() => navegarParaProduto(produto.id)}
               >
                 <Text style={style.textoBotao}>Escolher</Text>
               </TouchableOpacity>
@@ -310,7 +247,6 @@ export default function Conjunto({ route }: Props) {
       >
         <View style={style.modalContainer}>
           <View style={style.modalContent}>
-            {/* Header do Modal */}
             <View style={style.modalHeader}>
               <Text style={style.modalTitle}>Filtrar Conjuntos</Text>
               <TouchableOpacity 
@@ -321,7 +257,6 @@ export default function Conjunto({ route }: Props) {
               </TouchableOpacity>
             </View>
 
-            {/* Classificar Por */}
             <View style={style.secaoFiltro}>
               <Text style={style.tituloSecao}>Classificar Por</Text>
               {opcoesClassificacao.map((opcao, index) => (
@@ -371,7 +306,6 @@ export default function Conjunto({ route }: Props) {
               ))}
             </View>
 
-            {/* Botões de Ação */}
             <View style={style.botoesAcao}>
               <TouchableOpacity 
                 style={style.botaoLimpar}

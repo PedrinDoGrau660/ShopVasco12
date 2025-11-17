@@ -107,12 +107,12 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
 
     const handleCurtirComentario = async (comentarioId: string) => {
         const userId = await getUserId();
-        
+
         setComentarios(comentarios.map(comentario => {
             if (comentario.id === comentarioId) {
                 // Verifica se o usuário já curtiu este comentário
                 const usuarioJaCurtiu = comentario.usuariosQueCurtiram.includes(userId);
-                
+
                 if (usuarioJaCurtiu) {
                     // Se já curtiu, remove o like
                     Alert.alert('Info', 'Você já curtiu este comentário!');
@@ -155,10 +155,10 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
                 onPress={() => handleCurtirComentario(comentario.id)}
                 disabled={jaCurtiu}
             >
-                <Ionicons 
-                    name={jaCurtiu ? "heart" : "heart-outline"} 
-                    size={16} 
-                    color={jaCurtiu ? "#FF3B30" : "#666"} 
+                <Ionicons
+                    name={jaCurtiu ? "heart" : "heart-outline"}
+                    size={16}
+                    color={jaCurtiu ? "#FF3B30" : "#666"}
                 />
                 <Text style={[
                     style.curtirText,

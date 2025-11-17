@@ -7,30 +7,12 @@ import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
 import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
+import { camisas, Camisa } from "../../data/camisaHomen"; // IMPORTE OS DADOS
 
-// Importe as imagens reais dos produtos
-import calcaImagem from '../../assets/dvd.jpg'; 
-import camisetaImagem from '../../assets/dvd.jpg';
-import shortsImagem from '../../assets/dvd.jpg';
-import jaquetaImagem from '../../assets/dvd.jpg';
-import meiaoImagem from '../../assets/dvd.jpg';
-import moletomImagem from '../../assets/dvd.jpg';
-
-// Defina as props corretamente
 type LinhaMasculinaRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
 
 type Props = {
   route: LinhaMasculinaRouteProp;
-};
-
-type Produto = {
-  id: number;
-  nome: string;
-  preco: number;
-  precoOriginal?: number;
-  subcategoria: string;
-  imagem: any;
-  rota: keyof StackParamList;
 };
 
 export default function LinhaMasculina({ route }: Props) {
@@ -39,8 +21,8 @@ export default function LinhaMasculina({ route }: Props) {
   const [classificacaoSelecionada, setClassificacaoSelecionada] = useState("Nome do Produto");
   const [subcategoriaSelecionada, setSubcategoriaSelecionada] = useState("Todas");
   
-  // ESTADO PARA PRODUTOS FILTRADOS (PESQUISA + FILTROS)
-  const [produtosFiltrados, setProdutosFiltrados] = useState<Produto[]>([]);
+  // ESTADO PARA PRODUTOS FILTRADOS
+  const [produtosFiltrados, setProdutosFiltrados] = useState<Camisa[]>([]);
   const [termoPesquisa, setTermoPesquisa] = useState(route.params?.searchTerm || "");
 
   const opcoesClassificacao = [
@@ -60,82 +42,30 @@ export default function LinhaMasculina({ route }: Props) {
     "TREINO"
   ];
 
-  // Dados de produtos com rotas específicas
-  const produtos: Produto[] = [
-    { 
-      id: 1, 
-      nome: "CALÇA AQUECIMENTO COMISSÃO VASCO 25", 
-      preco: 379.99, 
-      subcategoria: "AQUECIMENTO", 
-      imagem: calcaImagem,
-      rota: "CalcaAquecimento"
-    },
-    { 
-      id: 2, 
-      nome: "CAMISETA TREINO VASCO 2024", 
-      preco: 199.99, 
-      subcategoria: "TREINO", 
-      imagem: camisetaImagem,
-      rota: "CamisetaTreino"
-    },
-    { 
-      id: 3, 
-      nome: "SHORTS JOGO VASCO PRINCIPAL", 
-      preco: 159.99, 
-      subcategoria: "UNIFORME DE JOGO", 
-      imagem: shortsImagem,
-      rota: "ShortsJogo"
-    },
-    { 
-      id: 4, 
-      nome: "JAQUETA INVERNO VASCO", 
-      preco: 349.99, 
-      subcategoria: "INVERNO", 
-      imagem: jaquetaImagem,
-      rota: "JaquetaInverno"
-    },
-    { 
-      id: 5, 
-      nome: "MEIÃO OFICIAL VASCO", 
-      preco: 49.99, 
-      subcategoria: "MEIÃO", 
-      imagem: meiaoImagem,
-      rota: "MeiaoOficial"
-    },
-    { 
-      id: 6, 
-      nome: "MOLETOM CASUAL VASCO", 
-      preco: 229.99, 
-      subcategoria: "CASUAL", 
-      imagem: moletomImagem,
-      rota: "MoletomCasual"
-    },
-  ];
+  // FILTRA APENAS PRODUTOS MASCULINOS DO ARQUIVO DE DADOS
+  const produtosMasculinos = camisas.filter(produto => produto.categoria === 'masculina');
 
   // FUNÇÃO PARA LIDAR COM A PESQUISA
   const handleSearch = (searchText: string) => {
     setTermoPesquisa(searchText);
     
     if (!searchText.trim()) {
-      // Se a pesquisa estiver vazia, aplica apenas os filtros atuais
       aplicarFiltrosEModal();
       return;
     }
 
-    // Filtra os produtos baseado no texto da pesquisa
-    const filtered = produtos.filter(produto =>
+    const filtered = produtosMasculinos.filter(produto =>
       produto.nome.toLowerCase().includes(searchText.toLowerCase()) ||
       produto.subcategoria.toLowerCase().includes(searchText.toLowerCase())
     );
     
-    // Aplica ordenação nos produtos filtrados
     const filteredAndSorted = aplicarOrdenacao(filtered);
     setProdutosFiltrados(filteredAndSorted);
   };
 
   // FUNÇÃO PARA APLICAR FILTROS E ORDENAÇÃO
   const aplicarFiltrosEModal = () => {
-    let filtered = produtos;
+    let filtered = produtosMasculinos;
 
     // Filtro por subcategoria
     if (subcategoriaSelecionada !== "Todas") {
@@ -144,7 +74,7 @@ export default function LinhaMasculina({ route }: Props) {
       );
     }
 
-    // Filtro por pesquisa (se houver termo)
+    // Filtro por pesquisa
     if (termoPesquisa.trim()) {
       filtered = filtered.filter(produto =>
         produto.nome.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
@@ -152,13 +82,12 @@ export default function LinhaMasculina({ route }: Props) {
       );
     }
 
-    // Aplica ordenação
     const filteredAndSorted = aplicarOrdenacao(filtered);
     setProdutosFiltrados(filteredAndSorted);
   };
 
   // FUNÇÃO PARA APLICAR ORDENAÇÃO
-  const aplicarOrdenacao = (produtosParaOrdenar: Produto[]) => {
+  const aplicarOrdenacao = (produtosParaOrdenar: Camisa[]) => {
     return [...produtosParaOrdenar].sort((a, b) => {
       switch (classificacaoSelecionada) {
         case "Menor Preço":
@@ -171,10 +100,10 @@ export default function LinhaMasculina({ route }: Props) {
     });
   };
 
-  // Função para navegar para a página do produto
-  const navegarParaProduto = (rota: keyof StackParamList) => {
-    navigation.navigate(rota as any);
-  };
+  // FUNÇÃO ATUALIZADA - Navega para CamisaDetalhes com ID
+const navegarParaProduto = (produtoId: number) => {
+  navigation.navigate("CamisaDetalhes", { camisaId: produtoId });
+};
 
   const aplicarFiltros = () => {
     aplicarFiltrosEModal();
@@ -185,7 +114,6 @@ export default function LinhaMasculina({ route }: Props) {
     setClassificacaoSelecionada("Nome do Produto");
     setSubcategoriaSelecionada("Todas");
     setTermoPesquisa("");
-    // Atualiza ParteDeCima com pesquisa vazia
     handleSearch("");
   };
 
@@ -193,7 +121,7 @@ export default function LinhaMasculina({ route }: Props) {
     return `R$ ${preco.toFixed(2).replace('.', ',')}`;
   };
 
-  // UseEffect para aplicar a pesquisa quando o componente montar ou quando receber parâmetros
+  // UseEffects
   useEffect(() => {
     if (route.params?.searchTerm) {
       handleSearch(route.params.searchTerm);
@@ -202,17 +130,13 @@ export default function LinhaMasculina({ route }: Props) {
     }
   }, [route.params?.searchTerm]);
 
-  // Inicializa os produtos filtrados quando o componente monta
   useEffect(() => {
     aplicarFiltrosEModal();
   }, []);
 
   return (
     <View style={style.container}>
-      {/* ParteDeCima com barra de pesquisa */}
       <ParteDeCima onSearch={handleSearch} showSearchBar={true} />
-
-      
       
       <ScrollView 
         style={style.scrollView}
@@ -231,7 +155,6 @@ export default function LinhaMasculina({ route }: Props) {
             <Text style={style.textoBotaoFiltrar}>Filtrar</Text>
           </TouchableOpacity>
           
-          {/* Mostra termo de pesquisa atual */}
           {termoPesquisa && (
             <View style={style.pesquisaAtivaContainer}>
               <Text style={style.pesquisaAtivaText}>
@@ -249,7 +172,7 @@ export default function LinhaMasculina({ route }: Props) {
 
         <View style={style.linhaDivisoria} />
 
-        {/* Mostra mensagem quando não encontra resultados */}
+        {/* Mensagem quando não encontra resultados */}
         {produtosFiltrados.length === 0 && (
           <View style={style.noResultsContainer}>
             <FontAwesome name="search" size={40} color="#ccc" />
@@ -268,12 +191,12 @@ export default function LinhaMasculina({ route }: Props) {
           </View>
         )}
 
-        {/* Lista de produtos FILTRADOS */}
+        {/* Lista de produtos FILTRADOS - AGORA DINÂMICA */}
         {produtosFiltrados.map((produto) => (
           <View key={produto.id} style={style.produtoContainer}>
             <View style={style.imagemContainer}>
               <Image 
-                source={produto.imagem}
+                source={produto.imagens[0]} // USA A PRIMEIRA IMAGEM DO ARRAY
                 style={style.imagemProduto}
                 resizeMode="cover"
               />
@@ -285,25 +208,22 @@ export default function LinhaMasculina({ route }: Props) {
               </Text>
               
               <View style={style.precoContainer}>
-                {produto.precoOriginal && (
-                  <Text style={style.precoOriginal}>
-                    {formatarPreco(produto.precoOriginal)}
-                  </Text>
-                )}
-                <Text style={style.precoPrincipal}>
+                <Text style={style.precoOriginal}>
                   {formatarPreco(produto.preco)}
+                </Text>
+                <Text style={style.precoPrincipal}>
+                  {formatarPreco(produto.precoDesconto)}
                 </Text>
               </View>
               
               <Text style={style.precoParcelado}>
-                {formatarPreco(produto.preco * 0.95)} à vista com desconto Pix{"\n"}
-                ou 12x de {formatarPreco(produto.preco / 12)}
+                {produto.descricaoPreco}
               </Text>
 
-              {/* Botão atualizado com navegação */}
+              {/* Botão atualizado para navegação dinâmica */}
               <TouchableOpacity 
                 style={style.botaoEscolher}
-                onPress={() => navegarParaProduto(produto.rota)}
+                onPress={() => navegarParaProduto(produto.id)}
               >
                 <Text style={style.textoBotao}>Escolher</Text>
               </TouchableOpacity>
@@ -317,7 +237,7 @@ export default function LinhaMasculina({ route }: Props) {
         <ParteDeBaixo />
       </ScrollView>
 
-      {/* Modal de Filtro */}
+      {/* Modal de Filtro (mantém igual) */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -326,7 +246,6 @@ export default function LinhaMasculina({ route }: Props) {
       >
         <View style={style.modalContainer}>
           <View style={style.modalContent}>
-            {/* Header do Modal */}
             <View style={style.modalHeader}>
               <Text style={style.modalTitle}>Filtrar Produtos</Text>
               <TouchableOpacity 
@@ -337,7 +256,6 @@ export default function LinhaMasculina({ route }: Props) {
               </TouchableOpacity>
             </View>
 
-            {/* Classificar Por */}
             <View style={style.secaoFiltro}>
               <Text style={style.tituloSecao}>Classificar Por</Text>
               {opcoesClassificacao.map((opcao, index) => (
@@ -362,7 +280,6 @@ export default function LinhaMasculina({ route }: Props) {
               ))}
             </View>
 
-            {/* Subcategorias */}
             <View style={style.secaoFiltro}>
               <Text style={style.tituloSecao}>Subcategorias</Text>
               {opcoesSubcategorias.map((opcao, index) => (
@@ -387,7 +304,6 @@ export default function LinhaMasculina({ route }: Props) {
               ))}
             </View>
 
-            {/* Botões de Ação */}
             <View style={style.botoesAcao}>
               <TouchableOpacity 
                 style={style.botaoLimpar}

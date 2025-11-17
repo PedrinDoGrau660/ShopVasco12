@@ -46,8 +46,8 @@ textoNegrito: {
 linhasContainer: {
   padding: 20,
   backgroundColor: '#f8f8f8',
-  marginTop: 20,
-  borderRadius: 10,
+  marginTop: 25,
+  borderRadius: 15,
   marginHorizontal: 15,
 },
 

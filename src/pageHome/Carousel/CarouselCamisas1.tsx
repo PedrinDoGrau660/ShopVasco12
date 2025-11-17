@@ -11,16 +11,26 @@ import {
 } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 
-const images: ImageSourcePropType[] = [
-  require("../../assets/dvd.jpg"),
-  require("../../assets/dvd.jpg"),
-  require("../../assets/dvd.jpg"),
-  require("../../assets/dvd.jpg"),
-];
+interface Props {
+  imagens: any[]; // Array de imagens recebido como prop
+}
 
-export default function MyCarousel() {
+export default function MyCarousel({ imagens }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const width = Dimensions.get("window").width;
+
+  // Se não houver imagens, mostra um placeholder
+  if (!imagens || imagens.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Image 
+          source={require("../../assets/dvd.jpg")} 
+          style={styles.mainImage} 
+        />
+        <Text style={styles.noImagesText}>Imagem não disponível</Text>
+      </View>
+    );
+  }
 
   const handleThumbnailPress = (index: number) => {
     setCurrentIndex(index);
@@ -30,11 +40,11 @@ export default function MyCarousel() {
     <View style={styles.container}>
       {/* Carousel principal */}
       <Carousel
-        loop
+        loop={imagens.length > 1}
         width={width * 0.9}
         height={250}
         autoPlay={false}
-        data={images}
+        data={imagens}
         onSnapToItem={(index) => setCurrentIndex(index)}
         defaultIndex={currentIndex}
         renderItem={({ item }: { item: ImageSourcePropType }) => (
@@ -42,42 +52,46 @@ export default function MyCarousel() {
         )}
       />
       
-      {/* Indicadores de página */}
-      <View style={styles.pagination}>
-        {images.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.paginationDot,
-              index === currentIndex ? styles.paginationDotActive : styles.paginationDotInactive
-            ]}
-          />
-        ))}
-      </View>
-
-      {/* Miniaturas das imagens alinhadas à esquerda */}
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        style={styles.thumbnailsScrollContainer}
-        contentContainerStyle={styles.thumbnailsContent}
-      >
-        {images.map((image, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.thumbnail,
-              index === currentIndex && styles.thumbnailActive
-            ]}
-            onPress={() => handleThumbnailPress(index)}
-          >
-            <Image 
-              source={image} 
-              style={styles.thumbnailImage} 
+      {/* Indicadores de página - só mostra se tiver mais de 1 imagem */}
+      {imagens.length > 1 && (
+        <View style={styles.pagination}>
+          {imagens.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.paginationDot,
+                index === currentIndex ? styles.paginationDotActive : styles.paginationDotInactive
+              ]}
             />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>    
+          ))}
+        </View>
+      )}
+
+      {/* Miniaturas das imagens - só mostra se tiver mais de 1 imagem */}
+      {imagens.length > 1 && (
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.thumbnailsScrollContainer}
+          contentContainerStyle={styles.thumbnailsContent}
+        >
+          {imagens.map((image, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.thumbnail,
+                index === currentIndex && styles.thumbnailActive
+              ]}
+              onPress={() => handleThumbnailPress(index)}
+            >
+              <Image 
+                source={image} 
+                style={styles.thumbnailImage} 
+              />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}    
     </View>
   );
 }
@@ -149,5 +163,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "#333",
+  },
+  noImagesText: {
+    marginTop: 10,
+    color: "#666",
+    fontSize: 14,
   },
 });

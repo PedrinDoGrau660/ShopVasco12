@@ -92,7 +92,6 @@ export default function Home({ route }: Props) {
 
   return (
     <View style={style.container}>
-      // Na sua Home page, atualize o ParteDeCima:
 <ParteDeCima onPerfilPress={() => navigation.navigate('Perfil')} />
       
       <ScrollView style={style.content} showsVerticalScrollIndicator={false}>
@@ -134,6 +133,7 @@ export default function Home({ route }: Props) {
             </TouchableOpacity>
           ))}
         </View>
+        <View style={style.Logo}></View>
         <ParteDeBaixo />
       </ScrollView>
     </View>
