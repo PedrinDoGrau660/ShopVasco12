@@ -83,9 +83,8 @@ export const style = StyleSheet.create({
     color: '#ffffff',
   },
   precoOriginal: {
-    fontSize: 14,
-    color: '#999',
-    textDecorationLine: 'line-through',
+ fontSize: 18,
+    color: '#ffffffff',
   },
   precoParcelado: {
     fontSize: 11,

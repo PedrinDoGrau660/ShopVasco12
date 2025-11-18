@@ -1,4 +1,3 @@
-// src/screens/NoticiaDetalhes/NoticiaDetalhes.tsx
 import React, { useState } from 'react';
 import {
     View,
@@ -9,6 +8,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     Alert,
+    Image,
 } from 'react-native';
 import { style } from './styles';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -24,7 +24,7 @@ interface Comentario {
     texto: string;
     data: string;
     curtidas: number;
-    usuariosQueCurtiram: string[]; // Nova propriedade para controlar quem já curtiu
+    usuariosQueCurtiram: string[];
 }
 
 export default function NoticiaDetalhes() {
@@ -40,7 +40,7 @@ export default function NoticiaDetalhes() {
             texto: 'Que vitória incrível! Time jogou muito!',
             data: '15 Nov 2024 - 14:30',
             curtidas: 8,
-            usuariosQueCurtiram: ['user123', 'user456'] // IDs de usuários que já curtiram
+            usuariosQueCurtiram: ['user123', 'user456']
         },
         {
             id: '2',
@@ -52,34 +52,73 @@ export default function NoticiaDetalhes() {
         }
     ]);
 
-    // Dados mockados da notícia
-    const noticia = {
-        id: noticiaId,
-        titulo: 'Time vence campeonato estadual',
-        conteudo: `Em uma partida eletrizante, nosso time conquistou o título do campeonato estadual após uma campanha impecável. 
+    // Dados das notícias baseadas no ID
+    const noticias = {
+        '1': {
+            id: '1',
+            titulo: 'Diniz brilha no comando do Vasco: torcida aprova trabalho do técnico',
+            conteudo: `Fernando Diniz está fazendo um excelente trabalho à frente do Vasco da Gama e conquistando a torcida com seu estilo de jogo característico.
 
-A equipe demonstrou grande determinação e habilidade throughout do torneio, culminando em uma vitória espetacular na final.
+O técnico, que assumiu o time há três meses, vem implementando sua filosofia de posse de bola e pressão alta, características que marcaram sua passagem por outros clubes.
 
-O jogo decisivo foi marcado por momentos de grande emoção, com o time demonstrando um futebol de alta qualidade e muita garra.
+Sob o comando de Diniz, o Vasco apresenta um futebol mais organizado e ofensivo, com grande volume de jogo e criação constante de oportunidades. Os jogadores parecem ter assimilado bem as ideias do treinador.
 
-Esta conquista marca um momento histórico para o clube e para todos os torcedores que acompanharam de perto essa jornada incrível.`,
-        data: '15 Nov 2024',
-        autor: 'Redação Esportiva',
-        imagem: 'https://example.com/noticia1.jpg',
-        curtidas: 156,
-        comentarios: comentarios.length
-    };
+"Estamos evoluindo a cada partida. O Diniz trouxe uma identidade para o time que há muito tempo não víamos no Vasco", comentou um torcedor após a última vitória.
+
+A diretoria do clube já sinalizou que pretende manter o técnico para a próxima temporada, confiante no trabalho que vem sendo desenvolvido.`,
+            data: '20 Nov 2024',
+            autor: 'Redação Esportiva',
+            imagem: require('../imagens/diniz.png'),
+            curtidas: 234,
+            comentarios: comentarios.length
+        },
+        '2': {
+            id: '2',
+            titulo: 'Pedrinho se consolida como peça fundamental no meio-campo do Vasco',
+            conteudo: `O meia Pedrinho vem se tornando um dos principais nomes do Vasco na atual temporada. Com passes precisos e visão de jogo apurada, o jogador tem sido decisivo nos momentos importantes.
+
+Na última partida contra o Flamengo, Pedrinho foi eleito o melhor em campo, com dois assists e 93% de precisão nos passes. Sua atuação foi crucial para a vitória por 3x1.
+
+"Pedrinho é um jogador diferenciado. Tem a qualidade técnica que precisamos para desequilibrar", elogiou o técnico Fernando Diniz em coletiva pós-jogo.
+
+O contrato do jogador vai até o final de 2025, e a diretoria já iniciou conversas para renovação, considerando o interesse de outros clubes brasileiros e do exterior.
+
+A torcida tem criado cantos especiais para o meia, que se tornou ídolo rapidamente no clube.`,
+            data: '18 Nov 2024',
+            autor: 'Departamento de Futebol',
+            imagem: require('../imagens/pedrinho.png'),
+            curtidas: 189,
+            comentarios: comentarios.length
+        },           '3': {
+    id: '3',
+    titulo: 'Vasco surpreende e entra na disputa por Neymar Jr',
+    conteudo: `O Vasco da Gama causou frisson no mercado da bola ao demonstrar interesse em contratar Neymar Jr. A informação, que parecia improvável, ganhou força após reuniões sigilosas entre a diretoria do clube e representantes do astro brasileiro.
+
+Segundo fontes próximas ao jogador, Neymar estaria aberto a ouvir a proposta vascaína, principalmente pela sua histórica admiração pelo clube e pela possibilidade de se tornar um ídolo em um projeto ambicioso.
+
+"O Vasco está disposto a fazer um investimento histórico. Sabemos que é uma negociação complexa, mas temos um projeto sólido para apresentar ao Neymar", revelou um diretor do clube sob condição de anonimato.
+
+A proposta incluiria um contrato de dois anos, com salário compatível com o mercado e uma série de benefícios comerciais. A torcida já começou a pressionar nas redes sociais, com a hashtag #NeymarNoVasco viralizando.
+
+Se concretizada, esta seria uma das maiores contratações da história do futebol brasileiro, equiparando-se aos grandes nomes que já vestiram a camisa cruz-maltina.`,
+    data: '25 Nov 2024',
+    autor: 'Redação Mercado da Bola',
+    imagem: require('../imagens/neymar.png'),
+    curtidas: 528,
+    comentarios: comentarios.length
+}
+        };
+
+    const noticia = noticias[noticiaId as keyof typeof noticias];
 
     // Função para obter o ID único do usuário atual
     const getUserId = async (): Promise<string> => {
         try {
-            // Tenta obter do AsyncStorage (usuário logado)
             const userData = await AsyncStorage.getItem('userData');
             if (userData) {
                 const parsedData = JSON.parse(userData);
-                return parsedData.email || 'user_' + Date.now(); // Usa email como ID ou cria um temporário
+                return parsedData.email || 'user_' + Date.now();
             }
-            // Se não tem usuário logado, cria um ID temporário baseado no dispositivo
             return 'guest_' + Math.random().toString(36).substr(2, 9);
         } catch (error) {
             return 'guest_' + Math.random().toString(36).substr(2, 9);
@@ -94,7 +133,7 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
 
         const novoComentarioObj: Comentario = {
             id: Date.now().toString(),
-            usuario: 'Você', // Em uma app real, viria do perfil do usuário
+            usuario: 'Você',
             texto: novoComentario,
             data: 'Agora',
             curtidas: 0,
@@ -110,15 +149,12 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
 
         setComentarios(comentarios.map(comentario => {
             if (comentario.id === comentarioId) {
-                // Verifica se o usuário já curtiu este comentário
                 const usuarioJaCurtiu = comentario.usuariosQueCurtiram.includes(userId);
 
                 if (usuarioJaCurtiu) {
-                    // Se já curtiu, remove o like
                     Alert.alert('Info', 'Você já curtiu este comentário!');
                     return comentario;
                 } else {
-                    // Se não curtiu, adiciona o like
                     return {
                         ...comentario,
                         curtidas: comentario.curtidas + 1,
@@ -130,17 +166,14 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
         }));
     };
 
-    // Função para verificar se o usuário atual já curtiu um comentário
     const usuarioJaCurtiuComentario = async (comentario: Comentario): Promise<boolean> => {
         const userId = await getUserId();
         return comentario.usuariosQueCurtiram.includes(userId);
     };
 
-    // Componente para o botão de curtir com estado
     const CurtirButton = ({ comentario }: { comentario: Comentario }) => {
         const [jaCurtiu, setJaCurtiu] = useState(false);
 
-        // Verifica se o usuário já curtiu quando o componente monta
         React.useEffect(() => {
             const checkIfLiked = async () => {
                 const liked = await usuarioJaCurtiuComentario(comentario);
@@ -188,6 +221,14 @@ Esta conquista marca um momento histórico para o clube e para todos os torcedor
                 {/* Conteúdo da Notícia */}
                 <View style={style.noticiaContent}>
                     <Text style={style.noticiaTitulo}>{noticia.titulo}</Text>
+                    
+                    {/* Imagem da Notícia */}
+                    <Image 
+                        source={noticia.imagem} 
+                        style={style.noticiaImagem}
+                        resizeMode="cover"
+                    />
+                    
                     <View style={style.noticiaMeta}>
                         <Text style={style.noticiaData}>{noticia.data}</Text>
                         <Text style={style.noticiaAutor}>Por {noticia.autor}</Text>

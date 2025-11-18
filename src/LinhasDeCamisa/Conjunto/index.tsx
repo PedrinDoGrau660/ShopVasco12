@@ -117,10 +117,12 @@ export default function Conjunto({ route }: Props) {
     handleSearch("");
   };
 
-  const formatarPreco = (preco: number) => {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
-  };
-
+ const formatarPreco = (preco: number | undefined) => {
+  if (preco === undefined || preco === null) {
+    return "R$ 0,00";
+  }
+  return `R$ ${preco.toFixed(2).replace('.', ',')}`;
+};
   // UseEffects
   useEffect(() => {
   aplicarFiltrosEModal();
@@ -209,9 +211,6 @@ useEffect(() => {
               <View style={style.precoContainer}>
                 <Text style={style.precoOriginal}>
                   {formatarPreco(produto.preco)}
-                </Text>
-                <Text style={style.precoPrincipal}>
-                  {formatarPreco(produto.precoDesconto)}
                 </Text>
               </View>
               

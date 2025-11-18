@@ -118,9 +118,12 @@ export default function LinhaFeminina({ route }: Props) {
     handleSearch("");
   };
 
-  const formatarPreco = (preco: number) => {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
-  };
+ const formatarPreco = (preco: number | undefined) => {
+  if (preco === undefined || preco === null) {
+    return "R$ 0,00";
+  }
+  return `R$ ${preco.toFixed(2).replace('.', ',')}`;
+};
 
   // UseEffects
   useEffect(() => {
@@ -211,9 +214,7 @@ useEffect(() => {
                 <Text style={style.precoOriginal}>
                   {formatarPreco(produto.preco)}
                 </Text>
-                <Text style={style.precoPrincipal}>
-                  {formatarPreco(produto.precoDesconto)}
-                </Text>
+
               </View>
               
               <Text style={style.precoParcelado}>
