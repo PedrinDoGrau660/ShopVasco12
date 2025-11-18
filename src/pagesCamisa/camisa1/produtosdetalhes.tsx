@@ -83,7 +83,6 @@ export default function CamisaDetalhes() {
       id: camisa.id,
       nome: camisa.nome,
       preco: camisa.preco,
-      precoDesconto: camisa.precoDesconto,
       imagem: camisa.imagens[0],
       cor: selectedColor,
       tamanho: selectedSize
@@ -176,17 +175,7 @@ export default function CamisaDetalhes() {
           </TouchableOpacity>
 
           {/* Botão Comprar Agora */}
-          <TouchableOpacity
-            onPress={handleBuyNow}
-            style={[style.BotaoCarrinho, { backgroundColor: '#C00000' }]}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="whatsapp" size={16} color="#fff" />
-              <Text style={{ marginLeft: 5, color: '#fff' }}>
-                Comprar Agora - {selectedColor}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          
         </View>
         
         {/* Frete */}

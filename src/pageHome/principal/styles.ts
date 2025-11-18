@@ -108,7 +108,146 @@ tituloNoticias: {
   color: '#000000ff',
   textAlign: 'center',
   marginBottom: 15,
-},
+},  saudacaoContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 5,
+  },
+  saudacao: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#000',
+  },
+  subSaudacao: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 4,
+  },
+
+  menuRapido: {
+    padding: 20,
+  },
+  tituloSecao: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 15,
+  },
+  menuGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  menuItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  menuIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  menuText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#ffffffff',
+    textAlign: 'center',
+  },
+
+  headerSecao: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  verTudo: {
+    color: '#007AFF',
+    fontWeight: '500',
+  },
+
+  cardJogo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F8F8',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  jogoData: {
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  jogoDia: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
+  },
+  jogoHorario: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  jogoInfo: {
+    flex: 1,
+  },
+  jogoCampeonato: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 2,
+  },
+  jogoAdversario: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 2,
+  },
+  jogoLocal: {
+    fontSize: 12,
+    color: '#666',
+  },
+
+  noticiaImagem: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 12,
+  },
+  noticiaContent: {
+    flex: 1,
+  },
+  engajamentoNoticia: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  engajamentoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  engajamentoText: {
+    fontSize: 12,
+    color: '#666',
+  },
+
+  redesSociais: {
+    padding: 20,
+  },
+  redesGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  redeItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  redeText: {
+    fontSize: 12,
+    color: '#ffffffff',
+    marginTop: 6,
+  },
 cardNoticia: {
     backgroundColor: '#FFF',
     borderRadius: 8,

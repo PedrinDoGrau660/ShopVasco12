@@ -73,23 +73,27 @@ A diretoria do clube já sinalizou que pretende manter o técnico para a próxim
             comentarios: comentarios.length
         },
         '2': {
-            id: '2',
-            titulo: 'Pedrinho se consolida como peça fundamental no meio-campo do Vasco',
-            conteudo: `O meia Pedrinho vem se tornando um dos principais nomes do Vasco na atual temporada. Com passes precisos e visão de jogo apurada, o jogador tem sido decisivo nos momentos importantes.
+    id: '2',
+    titulo: 'Pedrinho assume presidência do Vasco com projeto ambicioso',
+    conteudo: `Em uma virada histórica para o clube, Pedrinho foi oficialmente empossado como o novo presidente do Vasco da Gama. O ex-jogador, que já era ídolo da torcida, agora assume o comando do clube com um projeto de reestruturação completa.
 
-Na última partida contra o Flamengo, Pedrinho foi eleito o melhor em campo, com dois assists e 93% de precisão nos passes. Sua atuação foi crucial para a vitória por 3x1.
+Em seu discurso de posse, Pedrinho destacou a importância de unir a tradição vascaína com uma gestão moderna e profissional. "Chegou a hora de devolver ao Vasco o lugar que merece no cenário nacional. Vamos trabalhar com transparência, competência e muito amor por esta camisa", afirmou emocionado.
 
-"Pedrinho é um jogador diferenciado. Tem a qualidade técnica que precisamos para desequilibrar", elogiou o técnico Fernando Diniz em coletiva pós-jogo.
+Entre as primeiras medidas anunciadas estão:
+• Reformulação do departamento de futebol
+• Investimento nas categorias de base
+• Modernização da estrutura do clube
+• Fortalecimento da marca Vasco no exterior
 
-O contrato do jogador vai até o final de 2025, e a diretoria já iniciou conversas para renovação, considerando o interesse de outros clubes brasileiros e do exterior.
+A torcida recebeu a notícia com euforia. "O Pedrinho conhece o clube como ninguém, sabe o que é ser vascaíno. Estamos confiantes", declarou um torcedor na sede do clube.
 
-A torcida tem criado cantos especiais para o meia, que se tornou ídolo rapidamente no clube.`,
-            data: '18 Nov 2024',
-            autor: 'Departamento de Futebol',
-            imagem: require('../imagens/pedrinho.png'),
-            curtidas: 189,
-            comentarios: comentarios.length
-        },           '3': {
+Analistas do mercado esportivo veem a escolha como acertada, considerando a popularidade e o conhecimento de Pedrinho sobre o futebol.`,
+    data: '20 Nov 2024',
+    autor: 'Redação Institucional',
+    imagem: require('../imagens/pedrinho.png'),
+    curtidas: 342,
+    comentarios: comentarios.length
+},         '3': {
     id: '3',
     titulo: 'Vasco surpreende e entra na disputa por Neymar Jr',
     conteudo: `O Vasco da Gama causou frisson no mercado da bola ao demonstrar interesse em contratar Neymar Jr. A informação, que parecia improvável, ganhou força após reuniões sigilosas entre a diretoria do clube e representantes do astro brasileiro.
@@ -125,15 +129,25 @@ Se concretizada, esta seria uma das maiores contratações da história do futeb
         }
     };
 
-    const handleAdicionarComentario = () => {
-        if (novoComentario.trim() === '') {
-            Alert.alert('Atenção', 'Digite um comentário antes de enviar.');
-            return;
+    const handleAdicionarComentario = async () => {
+    if (novoComentario.trim() === '') {
+        Alert.alert('Atenção', 'Digite um comentário antes de enviar.');
+        return;
+    }
+
+    try {
+        // Busca os dados do usuário logado
+        const userDataString = await AsyncStorage.getItem('userData');
+        let usuarioNome = 'Usuário';
+        
+        if (userDataString) {
+            const userData = JSON.parse(userDataString);
+            usuarioNome = userData.usuario || userData.name || 'Usuário';
         }
 
         const novoComentarioObj: Comentario = {
             id: Date.now().toString(),
-            usuario: 'Você',
+            usuario: usuarioNome, // Usa o nome real do usuário
             texto: novoComentario,
             data: 'Agora',
             curtidas: 0,
@@ -142,7 +156,22 @@ Se concretizada, esta seria uma das maiores contratações da história do futeb
 
         setComentarios([novoComentarioObj, ...comentarios]);
         setNovoComentario('');
-    };
+        
+    } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+        // Fallback caso haja erro
+        const novoComentarioObj: Comentario = {
+            id: Date.now().toString(),
+            usuario: 'Você',
+            texto: novoComentario,
+            data: 'Agora',
+            curtidas: 0,
+            usuariosQueCurtiram: []
+        };
+        setComentarios([novoComentarioObj, ...comentarios]);
+        setNovoComentario('');
+    }
+};
 
     const handleCurtirComentario = async (comentarioId: string) => {
         const userId = await getUserId();

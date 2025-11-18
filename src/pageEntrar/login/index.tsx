@@ -1,3 +1,4 @@
+// src/screens/Login/Login.tsx
 import React, { useState } from "react";
 import {
   Text,
@@ -12,6 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { style } from "./styles";
 import Logo from "../../assets/logo.png";
 import Fundo from "../../assets/dvd.jpg";
@@ -61,30 +63,61 @@ export default function Login() {
     }
   ];
 
-  // Login tradicional
-  const handleLogin = () => {
+  // Login tradicional - VERIFICA NO ASYNCSTORAGE
+  const handleLogin = async () => {
     if (!email || !senha) {
       Alert.alert("Erro", "Preencha todos os campos!");
       return;
     }
 
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      // Busca os dados do usuário no AsyncStorage
+      const userDataString = await AsyncStorage.getItem('userData');
+      
+      if (!userDataString) {
+        Alert.alert(
+          "Conta não encontrada", 
+          "Nenhuma conta cadastrada. Por favor, crie uma conta primeiro."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const userData = JSON.parse(userDataString);
+
+      // Verifica se o email e senha coincidem
+      if (userData.email === email && userData.senha === senha) {
+        // Login bem-sucedido
+        setTimeout(() => {
+          setLoading(false);
+          Alert.alert("Sucesso", `Bem-vindo de volta, ${userData.usuario}!`);
+          navigation.navigate("Home", { 
+            email: userData.email,
+            usuario: userData.usuario,
+            loginType: "email"
+          });
+        }, 1000);
+      } else {
+        setLoading(false);
+        Alert.alert(
+          "Erro de login", 
+          "Email ou senha incorretos. Verifique suas credenciais."
+        );
+      }
+      
+    } catch (error) {
+      console.error("Erro no login:", error);
       setLoading(false);
-      Alert.alert("Sucesso", "Login realizado com sucesso!");
-      navigation.navigate("Home", { 
-        email: email,
-        usuario: email.split('@')[0],
-        loginType: "email"
-      });
-    }, 2000);
+      Alert.alert("Erro", "Erro ao fazer login. Tente novamente.");
+    }
   };
 
-  
+  // Login com Google - SALVA NO ASYNCSTORAGE
   const handleGoogleLogin = () => {
     setLoadingGoogle(true);
     
-    // Simula o carregamento inicial do Google
     setTimeout(() => {
       setLoadingGoogle(false);
       setShowGoogleModal(true);
@@ -92,24 +125,39 @@ export default function Login() {
   };
 
   // Seleciona uma conta Google
-  const selectGoogleAccount = (account: any) => {
+  const selectGoogleAccount = async (account: any) => {
     if (account.id === "add") {
-      // Simula adicionar nova conta
       Alert.alert("Nova Conta", "Funcionalidade de adicionar nova conta");
       return;
     }
 
     setSelectedAccount(account);
     
-   
-    setTimeout(() => {
-      setShowGoogleModal(false);
-      navigation.navigate("Home", {
-        email: account.email,
+    try {
+      // Salva a conta Google no AsyncStorage
+      const googleUserData = {
         usuario: account.name,
-        loginType: "google"
-      });
-    }, 1000);
+        email: account.email,
+        loginType: "google",
+        photo: account.photo
+      };
+      
+      await AsyncStorage.setItem('userData', JSON.stringify(googleUserData));
+      
+      setTimeout(() => {
+        setShowGoogleModal(false);
+        Alert.alert("Sucesso", `Bem-vindo, ${account.name}!`);
+        navigation.navigate("Home", {
+          email: account.email,
+          usuario: account.name,
+          loginType: "google"
+        });
+      }, 1000);
+      
+    } catch (error) {
+      console.error("Erro ao salvar conta Google:", error);
+      Alert.alert("Erro", "Erro ao fazer login com Google.");
+    }
   };
 
   // Fecha o modal
@@ -141,6 +189,7 @@ export default function Login() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          editable={!loading}
         />
 
         <TextInput
@@ -151,9 +200,17 @@ export default function Login() {
           value={senha}
           onChangeText={setSenha}
           autoCapitalize="none"
+          editable={!loading}
         />
 
-        <TouchableOpacity style={style.botao} onPress={handleLogin}>
+        <TouchableOpacity 
+          style={[
+            style.botao, 
+            loading && { opacity: 0.7 }
+          ]} 
+          onPress={handleLogin}
+          disabled={loading}
+        >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
@@ -165,7 +222,10 @@ export default function Login() {
 
         {/* Botão do Google */}
         <TouchableOpacity 
-          style={style.botaoGoogle} 
+          style={[
+            style.botaoGoogle, 
+            loadingGoogle && { opacity: 0.7 }
+          ]} 
           onPress={handleGoogleLogin}
           disabled={loadingGoogle}
         >

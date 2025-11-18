@@ -2,7 +2,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { View, Text } from "react-native";
+
 import Login from "../pageEntrar/login";
 import Cadastro from "../pageEntrar/register";
 import Esqueceu from "../pageEntrar/esqueceusenha";
@@ -13,18 +13,9 @@ import Conjunto from "../LinhasDeCamisa/Conjunto";
 import NoticiaDetalhes from "../screens/NoticiaDetalhes/NoticiaDetalhes";
 import Perfil from "../screens/Perfil/perfil"; 
 import CartScreen from "../screens/CartScreen";
-
-// MANTENHA ESTA - é a página dinâmica
 import CamisaDetalhes from "../pagesCamisa/camisa1/produtosdetalhes";
-
-const PaginaEmDesenvolvimento = ({ nome }: { nome: string }) => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>{nome} - Em desenvolvimento</Text>
-  </View>
-);
-
-// Componentes placeholder
-
+import Estatisticas from "../pageHome/Estatisticas/estatisticas";
+import Tabela from "../pageHome/tabela/tabela";
 
 export type StackParamList = {
   Login: undefined;
@@ -33,13 +24,12 @@ export type StackParamList = {
   NoticiaDetalhes: { noticiaId: string };
   Perfil: undefined;
   CamisaDetalhes: { camisaId: number }; 
-   Carrinho: undefined;
-
-  Home: {
-    email?: string;
-    usuario?: string;
-    loginType?: "google" | "email";
-  };
+  Carrinho: undefined;
+  Home: { email?: string; usuario?: string; loginType?: string };
+  Estatisticas: undefined;
+  Tabela: undefined;
+  Calendario: undefined;
+  Noticias: undefined;
   LinhaMasculina: {
     searchTerm?: string;
   };
@@ -71,6 +61,8 @@ export default function Routes() {
       <Stack.Screen name="Conjunto" component={Conjunto} />
       <Stack.Screen name="NoticiaDetalhes" component={NoticiaDetalhes} />
       <Stack.Screen name="Perfil" component={Perfil} />
+      <Stack.Screen name="Estatisticas" component={Estatisticas} />
+      <Stack.Screen name="Tabela" component={Tabela} />
       <Stack.Screen 
         name="Carrinho" 
         component={CartScreen} 
