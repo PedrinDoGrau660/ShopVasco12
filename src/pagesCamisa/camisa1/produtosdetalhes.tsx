@@ -20,7 +20,8 @@ import Cores from "../bolinhas/BolinhasDaCor/index";
 import Tamanho from "../bolinhas/BolinhasDoTamanho/index";
 import FreteCalculator from "../frete/index";
 import { camisas, Camisa } from "../../data/camisa";
-import { useCart } from "../../contexts/CartContext"; // IMPORTE O CARRINHO
+import { useCart } from "../../contexts/CartContext";
+import SelecaoConjunto from '../../components/SelecaoConjunto'; // IMPORTE AQUI
 
 type RouteProps = RouteProp<StackParamList, "CamisaDetalhes">;
 
@@ -59,10 +60,11 @@ export default function CamisaDetalhes() {
   const route = useRoute<RouteProps>();
   const navigation = useNavigation<NavigationProp<StackParamList>>();
   const { camisaId } = route.params;
-  const { addToCart } = useCart(); // USE O CARRINHO
+  const { addToCart } = useCart();
   
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
+  const [camisasSelecionadas, setCamisasSelecionadas] = useState<number[]>([]); // ESTADO NOVO
 
   const camisa = camisas.find(c => c.id === camisaId);
 
@@ -75,24 +77,48 @@ export default function CamisaDetalhes() {
     }
   }, [camisa]);
 
-  // FUNÇÃO PARA ADICIONAR AO CARRINHO
+  // FUNÇÃO ATUALIZADA PARA ADICIONAR AO CARRINHO
   const handleAddToCart = () => {
     if (!camisa) return;
 
+    // VALIDAÇÃO PARA CONJUNTOS
+    if (camisa.tipoConjunto === 'duas-camisas' && camisasSelecionadas.length !== 2) {
+      Alert.alert(
+        'Seleção incompleta',
+        'Por favor, selecione 2 camisas para o conjunto.',
+        [{ text: 'Entendi' }]
+      );
+      return;
+    }
+
+    let itemName = camisa.nome;
+    
+    // Se for conjunto de 2 camisas, adiciona os nomes das camisas selecionadas
+    if (camisa.tipoConjunto === 'duas-camisas' && camisa.opcoesCamisas) {
+      const nomesCamisas = camisasSelecionadas.map(id => 
+        camisa.opcoesCamisas!.find(c => c.id === id)?.nome
+      ).filter(Boolean);
+      
+      if (nomesCamisas.length > 0) {
+        itemName += ` - ${nomesCamisas.join(' + ')}`;
+      }
+    }
+
     const cartItem = {
       id: camisa.id,
-      nome: camisa.nome,
+      nome: itemName,
       preco: camisa.preco,
       imagem: camisa.imagens[0],
       cor: selectedColor,
-      tamanho: selectedSize
+      tamanho: selectedSize,
+      camisasSelecionadas: camisasSelecionadas // Guarda as seleções
     };
 
     addToCart(cartItem);
     
     Alert.alert(
       'Produto adicionado!',
-      `${camisa.nome} (${selectedColor}) foi adicionado ao carrinho.`,
+      `${itemName} (${selectedColor}) foi adicionado ao carrinho.`,
       [
         { text: 'Continuar Comprando', style: 'cancel' },
         { text: 'Ver Carrinho', onPress: () => navigation.navigate('Carrinho') }
@@ -100,12 +126,35 @@ export default function CamisaDetalhes() {
     );
   };
 
-  // FUNÇÃO PARA COMPRAR DIRETO (VIA WHATSAPP)
+  // FUNÇÃO ATUALIZADA PARA COMPRAR DIRETO
   const handleBuyNow = () => {
     if (!camisa) return;
 
+    // VALIDAÇÃO PARA CONJUNTOS
+    if (camisa.tipoConjunto === 'duas-camisas' && camisasSelecionadas.length !== 2) {
+      Alert.alert(
+        'Seleção incompleta',
+        'Por favor, selecione 2 camisas para o conjunto.',
+        [{ text: 'Entendi' }]
+      );
+      return;
+    }
+
+    let produtoDescricao = camisa.nome;
+    
+    // Adiciona nomes das camisas selecionadas se for conjunto
+    if (camisa.tipoConjunto === 'duas-camisas' && camisa.opcoesCamisas) {
+      const nomesCamisas = camisasSelecionadas.map(id => 
+        camisa.opcoesCamisas!.find(c => c.id === id)?.nome
+      ).filter(Boolean);
+      
+      if (nomesCamisas.length > 0) {
+        produtoDescricao += ` - ${nomesCamisas.join(' + ')}`;
+      }
+    }
+
     const mensagem = `Olá! Gostaria de comprar o produto:\n\n${
-      `${camisa.nome} - Cor: ${selectedColor} - Tamanho: ${selectedSize} - R$ ${camisa.preco.toFixed(2)}`
+      `${produtoDescricao} - Cor: ${selectedColor} - Tamanho: ${selectedSize} - R$ ${camisa.preco.toFixed(2)}`
     }`;
 
     Linking.openURL(`https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`);
@@ -149,15 +198,23 @@ export default function CamisaDetalhes() {
         </View>
         
         {/* Cores e Tamanhos */}
-     <Cores 
-  cores={camisa.cores} 
-  onColorSelect={handleColorSelect}
-/>
+        <Cores 
+          cores={camisa.cores} 
+          onColorSelect={handleColorSelect}
+        />
         <Tamanho 
           tamanhos={camisa.tamanhos} 
           onSizeSelect={handleSizeSelect}
           selectedSize={selectedSize}
         />
+        
+        {/* 👇 AQUI É ONDE VOCÊ ADICIONA O COMPONENTE DE SELEÇÃO DE CONJUNTO */}
+        {camisa.tipoConjunto === 'duas-camisas' && camisa.opcoesCamisas && (
+          <SelecaoConjunto
+            opcoesCamisas={camisa.opcoesCamisas}
+            onCamisasSelecionadas={setCamisasSelecionadas}
+          />
+        )}
         
         {/* BOTÕES DE AÇÃO ATUALIZADOS */}
         <View style={style.botoesAcaoContainer}>
@@ -168,7 +225,7 @@ export default function CamisaDetalhes() {
           >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome name="shopping-cart" size={16} color="#C00000" />
-              <Text style={{ marginLeft: 5, color: '#C00000' }}>
+              <Text style={{ marginLeft: 5, color: '#C00000', fontWeight: 'bold' }}>
                 Adicionar ao Carrinho
               </Text>
             </View>

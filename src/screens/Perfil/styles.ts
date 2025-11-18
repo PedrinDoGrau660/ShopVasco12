@@ -1,27 +1,23 @@
-
-
-// E aqui está o styles.ts completo atualizado:
-import { StyleSheet, Dimensions } from 'react-native';
-
-const { width } = Dimensions.get('window');
+// src/screens/Perfil/styles.ts
+import { StyleSheet } from 'react-native';
 
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
-    backgroundColor: '#FFF',
   },
-
-  // Header
+  
+  // 👇 HEADER ATUALIZADO COM FUNDO PRETO
   header: {
-    paddingTop: 50,
-    paddingHorizontal: 16,
-    paddingBottom: 8,
+    backgroundColor: '#000', // FUNDO PRETO
+    paddingTop: 60,
+    paddingBottom: 15,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#DBDBDB',
+    borderBottomColor: '#333',
   },
   headerTop: {
     flexDirection: 'row',
@@ -29,89 +25,75 @@ export const style = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerLeftSpace: {
-    width: 40,
+    width: 40, // Espaço para o hamburguer
   },
+  // 👇 TEXTO DO HEADER EM BRANCO
   headerUsername: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#fff', // TEXTO BRANCO
+    textAlign: 'center',
+    flex: 1,
   },
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
   },
   headerButton: {
-    padding: 4,
+    padding: 5,
   },
 
-  // Profile Section
+  // ... resto dos estilos permanecem iguais ...
   profileSection: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
+    padding: 20,
+    backgroundColor: '#fff',
   },
   profileTop: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignItems: 'flex-start',
+    marginBottom: 15,
   },
   avatarContainer: {
     position: 'relative',
-    marginRight: 40,
-  },
-  avatar: {
-    width: 86,
-    height: 86,
-    borderRadius: 43,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
+    marginRight: 20,
   },
   avatarPlaceholder: {
     width: 86,
     height: 86,
     borderRadius: 43,
-    backgroundColor: '#F8F8F8',
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
-    borderStyle: 'dashed',
+    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
   },
   editAvatarButton: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    backgroundColor: '#3897F0',
+    backgroundColor: '#C00000',
     width: 28,
     height: 28,
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFF',
+    borderColor: '#fff',
   },
   newUserBadge: {
     position: 'absolute',
     top: -5,
     right: -5,
-    backgroundColor: '#10B981',
+    backgroundColor: '#C00000',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
   },
   newUserText: {
-    color: '#FFF',
+    color: '#fff',
     fontSize: 10,
     fontWeight: 'bold',
   },
-  loadingAvatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#DBDBDB',
-  },
-
-  // Stats
   statsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -124,16 +106,14 @@ export const style = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
-    marginBottom: 2,
   },
   statLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
+    marginTop: 4,
   },
-
-  // Profile Info
   profileInfo: {
-    marginBottom: 16,
+    marginBottom: 15,
   },
   displayName: {
     fontSize: 16,
@@ -143,46 +123,27 @@ export const style = StyleSheet.create({
   },
   bio: {
     fontSize: 14,
-    color: '#262626',
+    color: '#333',
     lineHeight: 18,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   memberSince: {
     fontSize: 12,
-    color: '#8E8E8E',
+    color: '#666',
   },
-
-  // Welcome Message
-  welcomeMessage: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F0F9FF',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#1E40AF',
-  },
-  welcomeText: {
-    fontSize: 14,
-    color: '#1E40AF',
-    marginLeft: 8,
-    flex: 1,
-    fontWeight: '500',
-  },
-
-  // Action Buttons
   actionButtons: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 10,
+    marginBottom: 15,
   },
   editButton: {
     flex: 1,
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#DBDBDB',
-    paddingVertical: 6,
+    backgroundColor: '#f8f9fa',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
     alignItems: 'center',
   },
   editButtonText: {
@@ -191,176 +152,112 @@ export const style = StyleSheet.create({
     color: '#000',
   },
   shareButton: {
-    width: 40,
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#DBDBDB',
+    backgroundColor: '#f8f9fa',
+    padding: 10,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
-
-  // Highlights (Stories)
+  welcomeMessage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#eff6ff',
+    padding: 12,
+    borderRadius: 8,
+    gap: 10,
+  },
+  welcomeText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#1E40AF',
+    fontWeight: '500',
+  },
   highlights: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#DBDBDB',
+    borderBottomColor: '#f0f0f0',
   },
   highlightItem: {
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 15,
   },
   highlightCircle: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    backgroundColor: '#F8F8F8',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#f8f9fa',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#DBDBDB',
-    marginBottom: 4,
-  },
-  highlightEmpty: {
-    backgroundColor: '#F8F8F8',
-    opacity: 0.6,
-  },
-  highlightEmoji: {
-    fontSize: 24,
+    borderColor: '#e0e0e0',
+    marginBottom: 5,
   },
   highlightText: {
     fontSize: 12,
-    color: '#262626',
+    color: '#333',
   },
-
-  // Tabs
   tabs: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#DBDBDB',
+    borderBottomColor: '#f0f0f0',
   },
   tab: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 15,
   },
   tabActive: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: '#000',
   },
-
-  // Posts Grid
   postsGrid: {
+    padding: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 0.5,
   },
   postItem: {
-    width: (width - 2) / 3,
-    height: (width - 2) / 3,
-    margin: 0.5,
-    backgroundColor: '#F8F8F8',
-  },
-  postImage: {
-    width: '100%',
-    height: '100%',
+    width: '33.333%',
+    aspectRatio: 1,
+    padding: 1,
   },
   postPlaceholder: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#FAFAFA',
-    borderWidth: 1,
-    borderColor: '#DBDBDB',
-    borderStyle: 'dashed',
+    flex: 1,
+    backgroundColor: '#f8f9fa',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    borderRadius: 4,
   },
   postPlaceholderText: {
-    fontSize: 10,
-    color: '#999',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  postOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 0,
-  },
-  postStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 4,
-  },
-  postStatText: {
-    color: '#FFF',
+    marginTop: 8,
     fontSize: 12,
-    fontWeight: 'bold',
-    marginLeft: 2,
+    color: '#999',
+    textAlign: 'center',
+    paddingHorizontal: 10,
   },
-
-  // Site Button
-  siteButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F0F9FF',
-    padding: 16,
-    margin: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#1E40AF',
-    marginTop: 20,
-  },
-  siteButtonText: {
-    fontSize: 16,
-    color: '#1E40AF',
-    marginLeft: 8,
-    fontWeight: '600',
-  },
-
-  // Bottom Menu
-  bottomMenu: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#DBDBDB',
-    marginTop: 20,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F8F8F8',
-  },
-  menuItemText: {
-    fontSize: 16,
-    color: '#262626',
-    marginLeft: 12,
-  },
-
-  // Logout Button
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-    margin: 16,
+    padding: 20,
+    margin: 20,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#DBDBDB',
-    borderRadius: 8,
-    marginBottom: 30,
+    borderColor: '#e0e0e0',
+    gap: 10,
   },
   logoutText: {
     fontSize: 16,
     color: '#666',
-    marginLeft: 8,
     fontWeight: '600',
+  },
+  loadingAvatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#f0f0f0',
   },
 });

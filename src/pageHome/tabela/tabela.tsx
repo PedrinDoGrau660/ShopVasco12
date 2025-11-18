@@ -13,28 +13,28 @@ import { Ionicons } from "@expo/vector-icons";
 export default function Tabela() {
   const navigation = useNavigation();
 
-  // Dados mockados da tabela do Brasileirão Série A 2024
+  // Dados da tabela conforme a imagem - Temporada 2025
   const tabela = [
-    { posicao: 1, time: "Flamengo", pontos: 71, jogos: 38, vitorias: 22, empates: 5, derrotas: 11, saldo: 35 },
-    { posicao: 2, time: "Palmeiras", pontos: 70, jogos: 38, vitorias: 21, empates: 7, derrotas: 10, saldo: 32 },
-    { posicao: 3, time: "São Paulo", pontos: 68, jogos: 38, vitorias: 20, empates: 8, derrotas: 10, saldo: 28 },
-    { posicao: 4, time: "Atlético-MG", pontos: 66, jogos: 38, vitorias: 19, empates: 9, derrotas: 10, saldo: 25 },
-    { posicao: 5, time: "Grêmio", pontos: 64, jogos: 38, vitorias: 18, empates: 10, derrotas: 10, saldo: 22 },
-    { posicao: 6, time: "Fluminense", pontos: 62, jogos: 38, vitorias: 17, empates: 11, derrotas: 10, saldo: 18 },
-    { posicao: 7, time: "Botafogo", pontos: 61, jogos: 38, vitorias: 17, empates: 10, derrotas: 11, saldo: 15 },
-    { posicao: 8, time: "Fortaleza", pontos: 59, jogos: 38, vitorias: 16, empates: 11, derrotas: 11, saldo: 12 },
-    { posicao: 9, time: "Internacional", pontos: 57, jogos: 38, vitorias: 15, empates: 12, derrotas: 11, saldo: 10 },
-    { posicao: 10, time: "Corinthians", pontos: 55, jogos: 38, vitorias: 14, empates: 13, derrotas: 11, saldo: 8 },
-    { posicao: 11, time: "Cruzeiro", pontos: 53, jogos: 38, vitorias: 14, empates: 11, derrotas: 13, saldo: 5 },
-    { posicao: 12, time: "Vasco da Gama", pontos: 51, jogos: 38, vitorias: 13, empates: 12, derrotas: 13, saldo: 2 },
-    { posicao: 13, time: "Bahia", pontos: 49, jogos: 38, vitorias: 13, empates: 10, derrotas: 15, saldo: -3 },
-    { posicao: 14, time: "Santos", pontos: 47, jogos: 38, vitorias: 12, empates: 11, derrotas: 15, saldo: -8 },
-    { posicao: 15, time: "Red Bull Bragantino", pontos: 45, jogos: 38, vitorias: 11, empates: 12, derrotas: 15, saldo: -12 },
-    { posicao: 16, time: "Coritiba", pontos: 43, jogos: 38, vitorias: 10, empates: 13, derrotas: 15, saldo: -15 },
-    { posicao: 17, time: "América-MG", pontos: 41, jogos: 38, vitorias: 9, empates: 14, derrotas: 15, saldo: -18 },
-    { posicao: 18, time: "Goiás", pontos: 39, jogos: 38, vitorias: 9, empates: 12, derrotas: 17, saldo: -22 },
-    { posicao: 19, time: "Cuiabá", pontos: 37, jogos: 38, vitorias: 8, empates: 13, derrotas: 17, saldo: -25 },
-    { posicao: 20, time: "Athletico-PR", pontos: 35, jogos: 38, vitorias: 7, empates: 14, derrotas: 17, saldo: -28 },
+    { posicao: 1, time: "Flamengo", pontos: 71, jogos: 33, vitorias: 21, empates: 8, derrotas: 4, golsPro: 69, golsContra: 21, saldo: 48 },
+    { posicao: 2, time: "Palmeiras", pontos: 68, jogos: 33, vitorias: 21, empates: 5, derrotas: 7, golsPro: 58, golsContra: 29, saldo: 29 },
+    { posicao: 3, time: "Cruzeiro", pontos: 64, jogos: 33, vitorias: 18, empates: 10, derrotas: 5, golsPro: 46, golsContra: 22, saldo: 24 },
+    { posicao: 4, time: "Mirassol", pontos: 59, jogos: 33, vitorias: 16, empates: 11, derrotas: 6, golsPro: 54, golsContra: 33, saldo: 21 },
+    { posicao: 5, time: "Bahia", pontos: 53, jogos: 33, vitorias: 15, empates: 8, derrotas: 10, golsPro: 44, golsContra: 40, saldo: 4 },
+    { posicao: 6, time: "Botafogo", pontos: 52, jogos: 33, vitorias: 14, empates: 10, derrotas: 9, golsPro: 44, golsContra: 28, saldo: 16 },
+    { posicao: 7, time: "Fluminense", pontos: 51, jogos: 33, vitorias: 15, empates: 6, derrotas: 12, golsPro: 38, golsContra: 37, saldo: 1 },
+    { posicao: 8, time: "Braganfino", pontos: 45, jogos: 34, vitorias: 13, empates: 6, derrotas: 15, golsPro: 40, golsContra: 50, saldo: -10 },
+    { posicao: 9, time: "São Paulo", pontos: 46, jogos: 33, vitorias: 12, empates: 9, derrotas: 12, golsPro: 37, golsContra: 36, saldo: 1 },
+    { posicao: 10, time: "Atlético-MG", pontos: 44, jogos: 34, vitorias: 11, empates: 11, derrotas: 12, golsPro: 37, golsContra: 39, saldo: -2 },
+    { posicao: 11, time: "Vasco da Gama", pontos: 42, jogos: 33, vitorias: 12, empates: 6, derrotas: 15, golsPro: 50, golsContra: 49, saldo: 1 },
+    { posicao: 12, time: "Ceará SC", pontos: 42, jogos: 33, vitorias: 11, empates: 9, derrotas: 13, golsPro: 31, golsContra: 30, saldo: 1 },
+    { posicao: 13, time: "Corinthians", pontos: 42, jogos: 33, vitorias: 11, empates: 9, derrotas: 13, golsPro: 35, golsContra: 38, saldo: -3 },
+    { posicao: 14, time: "Grêmio", pontos: 40, jogos: 33, vitorias: 10, empates: 10, derrotas: 13, golsPro: 35, golsContra: 43, saldo: -8 },
+    { posicao: 15, time: "Internacional", pontos: 37, jogos: 33, vitorias: 9, empates: 10, derrotas: 14, golsPro: 37, golsContra: 46, saldo: -9 },
+    { posicao: 16, time: "Santos", pontos: 36, jogos: 33, vitorias: 9, empates: 9, derrotas: 15, golsPro: 34, golsContra: 48, saldo: -14 },
+    { posicao: 17, time: "EC Vitória", pontos: 36, jogos: 33, vitorias: 8, empates: 11, derrotas: 14, golsPro: 29, golsContra: 47, saldo: -18 },
+    { posicao: 18, time: "Juventude", pontos: 32, jogos: 33, vitorias: 9, empates: 5, derrotas: 19, golsPro: 29, golsContra: 59, saldo: -30 },
+    { posicao: 19, time: "Fortaleza", pontos: 31, jogos: 33, vitorias: 7, empates: 10, derrotas: 16, golsPro: 34, golsContra: 51, saldo: -17 },
+    { posicao: 20, time: "Sport Recife", pontos: 17, jogos: 33, vitorias: 2, empates: 11, derrotas: 20, golsPro: 25, golsContra: 60, saldo: -35 },
   ];
 
   const getPosicaoStyle = (posicao: number) => {
@@ -57,11 +57,19 @@ export default function Tabela() {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Tabela do Brasileirão</Text>
+        <Text style={styles.headerTitle}>Classificação</Text>
         <View style={{ width: 24 }} />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        
+        {/* Informações da Temporada */}
+        <View style={styles.infoTemporada}>
+          <Text style={styles.temporadaTitle}>Temporada</Text>
+          <Text style={styles.temporadaAno}>2025</Text>
+          <Text style={styles.atualizacao}>Última atualização: 18/11/2025</Text>
+        </View>
+
         {/* Legenda */}
         <View style={styles.legenda}>
           <View style={styles.legendaItem}>
@@ -85,12 +93,14 @@ export default function Tabela() {
         {/* Cabeçalho da Tabela */}
         <View style={styles.cabecalho}>
           <Text style={styles.colPos}>#</Text>
-          <Text style={styles.colTime}>Time</Text>
-          <Text style={styles.colPts}>PTS</Text>
-          <Text style={styles.colJogos}>J</Text>
-          <Text style={styles.colVitorias}>V</Text>
+          <Text style={styles.colTime}>Clube</Text>
+          <Text style={styles.colPts}>Pts</Text>
+          <Text style={styles.colJogos}>PJ</Text>
+          <Text style={styles.colVitorias}>VIT</Text>
           <Text style={styles.colEmpates}>E</Text>
-          <Text style={styles.colDerrotas}>D</Text>
+          <Text style={styles.colDerrotas}>DER</Text>
+          <Text style={styles.colGolsPro}>GP</Text>
+          <Text style={styles.colGolsContra}>GC</Text>
           <Text style={styles.colSaldo}>SG</Text>
         </View>
 
@@ -104,9 +114,35 @@ export default function Tabela() {
             <Text style={styles.colVitorias}>{time.vitorias}</Text>
             <Text style={styles.colEmpates}>{time.empates}</Text>
             <Text style={styles.colDerrotas}>{time.derrotas}</Text>
+            <Text style={styles.colGolsPro}>{time.golsPro}</Text>
+            <Text style={styles.colGolsContra}>{time.golsContra}</Text>
             <Text style={styles.colSaldo}>{time.saldo > 0 ? `+${time.saldo}` : time.saldo}</Text>
           </View>
         ))}
+
+        {/* Informações de Qualificação */}
+        <View style={styles.qualificacao}>
+          <Text style={styles.qualificacaoTitle}>Qualificação/Rebaixamento</Text>
+          <View style={styles.qualificacaoLista}>
+            <View style={styles.qualificacaoItem}>
+              <View style={[styles.qualificacaoCor, { backgroundColor: '#00B894' }]} />
+              <Text style={styles.qualificacaoTexto}>Fase de grupos da CONMEBOL Libertadores</Text>
+            </View>
+            <View style={styles.qualificacaoItem}>
+              <View style={[styles.qualificacaoCor, { backgroundColor: '#74B9FF' }]} />
+              <Text style={styles.qualificacaoTexto}>Qualificadoras da CONMEBOL Libertadores</Text>
+            </View>
+            <View style={styles.qualificacaoItem}>
+              <View style={[styles.qualificacaoCor, { backgroundColor: '#FDCB6E' }]} />
+              <Text style={styles.qualificacaoTexto}>Fase de grupos da CONMEBOL Sudamericana</Text>
+            </View>
+            <View style={styles.qualificacaoItem}>
+              <View style={[styles.qualificacaoCor, { backgroundColor: '#E17055' }]} />
+              <Text style={styles.qualificacaoTexto}>Rebaixamento</Text>
+            </View>
+          </View>
+        </View>
+
       </ScrollView>
     </View>
   );
@@ -134,6 +170,29 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 16,
+  },
+  infoTemporada: {
+    alignItems: 'center',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: '#F8F8F8',
+    borderRadius: 8,
+  },
+  temporadaTitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  temporadaAno: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 4,
+  },
+  atualizacao: {
+    fontSize: 12,
+    color: '#666',
+    fontStyle: 'italic',
   },
   legenda: {
     flexDirection: 'row',
@@ -169,55 +228,67 @@ const styles = StyleSheet.create({
   },
   linha: {
     flexDirection: 'row',
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
     alignItems: 'center',
   },
   colPos: {
-    width: 30,
+    width: 25,
     fontSize: 12,
     fontWeight: '600',
     textAlign: 'center',
   },
   colTime: {
     flex: 1,
-    fontSize: 14,
-    marginLeft: 8,
+    fontSize: 12,
+    marginLeft: 4,
   },
   colPts: {
-    width: 35,
-    fontSize: 14,
+    width: 30,
+    fontSize: 12,
     fontWeight: '700',
     textAlign: 'center',
   },
   colJogos: {
     width: 25,
-    fontSize: 12,
+    fontSize: 10,
     textAlign: 'center',
     color: '#666',
   },
   colVitorias: {
     width: 25,
-    fontSize: 12,
+    fontSize: 10,
     textAlign: 'center',
     color: '#666',
   },
   colEmpates: {
-    width: 25,
-    fontSize: 12,
+    width: 20,
+    fontSize: 10,
     textAlign: 'center',
     color: '#666',
   },
   colDerrotas: {
     width: 25,
-    fontSize: 12,
+    fontSize: 10,
+    textAlign: 'center',
+    color: '#666',
+  },
+  colGolsPro: {
+    width: 25,
+    fontSize: 10,
+    textAlign: 'center',
+    color: '#666',
+  },
+  colGolsContra: {
+    width: 25,
+    fontSize: 10,
     textAlign: 'center',
     color: '#666',
   },
   colSaldo: {
-    width: 35,
-    fontSize: 12,
+    width: 30,
+    fontSize: 10,
     textAlign: 'center',
     color: '#666',
   },
@@ -241,6 +312,35 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   timeNormal: {
+    color: '#333',
+  },
+  qualificacao: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: '#F8F8F8',
+    borderRadius: 8,
+  },
+  qualificacaoTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 8,
+  },
+  qualificacaoLista: {
+    gap: 6,
+  },
+  qualificacaoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  qualificacaoCor: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  qualificacaoTexto: {
+    fontSize: 12,
     color: '#333',
   },
 });

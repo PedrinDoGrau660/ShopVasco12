@@ -6,7 +6,6 @@ import ParteDeCima from "../../PartesFixas/TopDasLinhas/top";
 import ParteDeBaixo from "../../PartesFixas/LowDoApp/index";
 import { style } from "./style";
 import { FontAwesome } from "@expo/vector-icons";
-import Numeros from "../../pagesCamisa/bolinhas/BolinhaDeNumero";
 import { camisas, Camisa } from "../../data/camisa"; // IMPORTE OS DADOS
 
 type LinhaMasculinaRouteProp = RouteProp<StackParamList, "LinhaMasculina">;
@@ -229,10 +228,6 @@ useEffect(() => {
             </View>
           </View>
         ))}
-        
-        <View>
-          <Numeros />
-        </View>
         <ParteDeBaixo />
       </ScrollView>
 

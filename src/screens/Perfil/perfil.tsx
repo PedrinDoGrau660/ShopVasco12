@@ -228,16 +228,18 @@ export default function Perfil() {
 
   return (
     <View style={style.container}>
-      <Hamburguer color="#000" top={55} /> 
+      {/* 👇 MUDE A COR DO HAMBURGUER PARA BRANCO */}
+      <Hamburguer color="#fff" top={60} /> 
       
       <ScrollView style={style.content} showsVerticalScrollIndicator={false}>
         <Animated.View style={{ opacity: fadeAnim, transform: [{ scale: scaleAnim }] }}>
           
-          {/* Header Instagram Style */}
+          {/* 👇 HEADER COM FUNDO PRETO */}
           <View style={style.header}>
             <View style={style.headerTop}>
               <View style={style.headerLeftSpace} />
               
+              {/* 👇 MUDE A COR DO TEXTO PARA BRANCO */}
               <Text style={style.headerUsername}>@{usuario.nome.toLowerCase()}</Text>
               
               <View style={style.headerActions}>
@@ -249,7 +251,8 @@ export default function Perfil() {
                     { transform: [{ scale: createPostHandler.scaleValue }] }
                   ]}
                 >
-                  <Feather name="plus-square" size={24} color="#000" />
+                  {/* 👇 MUDE A COR DO ÍCONE PARA BRANCO */}
+                  <Feather name="plus-square" size={24} color="#fff" />
                 </AnimatedTouchable>
               </View>
             </View>

@@ -13,42 +13,55 @@ import { Ionicons } from "@expo/vector-icons";
 export default function Estatisticas() {
   const navigation = useNavigation();
 
-  // Dados mockados das estatísticas do Vasco
+  // Dados atualizados do Vasco na temporada 2025 (baseado no SofaScore)
   const estatisticas = {
-    temporada: "2024",
-    posicao: 12,
-    pontos: 51,
-    aproveitamento: "45%",
-    jogos: 38,
-    vitorias: 13,
-    empates: 12,
-    derrotas: 13,
-    golsPro: 42,
-    golsContra: 40,
-    saldoGols: 2,
-    cartoesAmarelos: 78,
-    cartoesVermelhos: 5,
-    jogadorArtilheiro: "Pedro Raul",
-    golsArtilheiro: 12,
-    jogadorAssistencias: "Payet",
-    assistencias: 8,
+    temporada: "2025",
+    posicao: 11,
+    pontos: 42,
+    aproveitamento: "42%",
+    jogos: 33,
+    vitorias: 12,
+    empates: 6,
+    derrotas: 15,
+    golsPro: 50,
+    golsContra: 49,
+    saldoGols: 1,
+    finalizacoesTotal: 385,
+    finalizacoesNoGol: 145,
+    precisaoFinalizacao: "38%",
+    posseDeBola: "52%",
+    passesTotal: 14520,
+    precisaoPasses: "84%",
+    cartoesAmarelos: 45,
+    cartoesVermelhos: 3,
+    jogadorArtilheiro: "Pablo Vegetti",
+    golsArtilheiro: 26,
+    jogadorAssistencias: "Lucas Piton",
+    assistencias: 7,
+    jogadorMaisMinutos: "Léo Jardim",
+    minutosJogados: 2970
   };
 
   const estatisticasCasa = {
-    vitorias: 8,
-    empates: 6,
-    derrotas: 4,
-    golsPro: 25,
-    golsContra: 16,
+    vitorias: 7,
+    empates: 4,
+    derrotas: 5,
+    golsPro: 28,
+    golsContra: 20,
+    aproveitamento: "55%"
   };
 
   const estatisticasFora = {
     vitorias: 5,
-    empates: 6,
-    derrotas: 9,
-    golsPro: 17,
-    golsContra: 24,
+    empates: 2,
+    derrotas: 10,
+    golsPro: 22,
+    golsContra: 29,
+    aproveitamento: "29%"
   };
+
+  // Últimas 5 partidas (W = Vitória, D = Derrota, L = Empate)
+  const ultimasPartidas = ["W", "W", "D", "D", "D"];
 
   return (
     <View style={styles.container}>
@@ -63,9 +76,16 @@ export default function Estatisticas() {
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         
+        {/* Informações da Temporada */}
+        <View style={styles.infoTemporada}>
+          <Text style={styles.temporadaTitle}>Temporada</Text>
+          <Text style={styles.temporadaAno}>2025</Text>
+          <Text style={styles.atualizacao}>Última atualização: 18/11/2025</Text>
+        </View>
+
         {/* Resumo da Temporada */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Resumo da Temporada 2024</Text>
+          <Text style={styles.cardTitle}>Resumo da Temporada</Text>
           <View style={styles.resumoGrid}>
             <View style={styles.resumoItem}>
               <Text style={styles.resumoValor}>{estatisticas.posicao}º</Text>
@@ -79,6 +99,26 @@ export default function Estatisticas() {
               <Text style={styles.resumoValor}>{estatisticas.aproveitamento}</Text>
               <Text style={styles.resumoLabel}>Aproveitamento</Text>
             </View>
+          </View>
+        </View>
+
+        {/* Últimas 5 Partidas */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Últimas 5 Partidas</Text>
+          <View style={styles.ultimasPartidas}>
+            {ultimasPartidas.map((resultado, index) => (
+              <View 
+                key={index} 
+                style={[
+                  styles.partidaCirculo,
+                  resultado === 'W' && styles.vitoriaCirculo,
+                  resultado === 'D' && styles.derrotaCirculo,
+                  resultado === 'L' && styles.empateCirculo
+                ]}
+              >
+                <Text style={styles.partidaTexto}>{resultado}</Text>
+              </View>
+            ))}
           </View>
         </View>
 
@@ -136,6 +176,7 @@ export default function Estatisticas() {
                 <Text style={styles.localStat}>{estatisticasCasa.derrotas}D</Text>
               </View>
               <Text style={styles.localGols}>{estatisticasCasa.golsPro}:{estatisticasCasa.golsContra}</Text>
+              <Text style={styles.localAproveitamento}>{estatisticasCasa.aproveitamento} aproveitamento</Text>
             </View>
             
             <View style={styles.divisoria} />
@@ -148,6 +189,38 @@ export default function Estatisticas() {
                 <Text style={styles.localStat}>{estatisticasFora.derrotas}D</Text>
               </View>
               <Text style={styles.localGols}>{estatisticasFora.golsPro}:{estatisticasFora.golsContra}</Text>
+              <Text style={styles.localAproveitamento}>{estatisticasFora.aproveitamento} aproveitamento</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Estatísticas de Jogo */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Estatísticas de Jogo</Text>
+          <View style={styles.estatisticasJogo}>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Posse de Bola</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.posseDeBola}</Text>
+            </View>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Finalizações</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.finalizacoesTotal}</Text>
+            </View>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Finalizações no Gol</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.finalizacoesNoGol}</Text>
+            </View>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Precisão de Finalização</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.precisaoFinalizacao}</Text>
+            </View>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Passes</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.passesTotal.toLocaleString()}</Text>
+            </View>
+            <View style={styles.estatisticaLinha}>
+              <Text style={styles.estatisticaLabel}>Precisão de Passes</Text>
+              <Text style={styles.estatisticaValor}>{estatisticas.precisaoPasses}</Text>
             </View>
           </View>
         </View>
@@ -171,6 +244,15 @@ export default function Estatisticas() {
                 <Text style={styles.destaqueLabel}>Assistências</Text>
                 <Text style={styles.destaqueValue}>{estatisticas.jogadorAssistencias}</Text>
                 <Text style={styles.destaqueStats}>{estatisticas.assistencias} assistências</Text>
+              </View>
+            </View>
+
+            <View style={styles.destaqueItem}>
+              <Ionicons name="time" size={24} color="#34C759" />
+              <View style={styles.destaqueInfo}>
+                <Text style={styles.destaqueLabel}>Mais Minutos</Text>
+                <Text style={styles.destaqueValue}>{estatisticas.jogadorMaisMinutos}</Text>
+                <Text style={styles.destaqueStats}>{estatisticas.minutosJogados} min</Text>
               </View>
             </View>
           </View>
@@ -219,6 +301,29 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  infoTemporada: {
+    alignItems: 'center',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: '#F8F8F8',
+    borderRadius: 8,
+  },
+  temporadaTitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  temporadaAno: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 4,
+  },
+  atualizacao: {
+    fontSize: 12,
+    color: '#666',
+    fontStyle: 'italic',
+  },
   card: {
     backgroundColor: '#F8F8F8',
     borderRadius: 12,
@@ -248,6 +353,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     marginTop: 4,
+  },
+  ultimasPartidas: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  partidaCirculo: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  vitoriaCirculo: {
+    backgroundColor: '#34C759',
+  },
+  empateCirculo: {
+    backgroundColor: '#FF9500',
+  },
+  derrotaCirculo: {
+    backgroundColor: '#FF3B30',
+  },
+  partidaTexto: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '700',
   },
   statsGrid: {
     flexDirection: 'row',
@@ -315,24 +446,46 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#000',
+    marginBottom: 2,
+  },
+  localAproveitamento: {
+    fontSize: 10,
+    color: '#666',
   },
   divisoria: {
     width: 1,
-    height: 40,
+    height: 50,
     backgroundColor: '#E5E5E5',
     marginHorizontal: 16,
   },
-  destaques: {
+  estatisticasJogo: {
+    gap: 8,
+  },
+  estatisticaLinha: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  estatisticaLabel: {
+    fontSize: 14,
+    color: '#333',
+  },
+  estatisticaValor: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+  },
+  destaques: {
+    gap: 12,
   },
   destaqueItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
   },
   destaqueInfo: {
     marginLeft: 12,
+    flex: 1,
   },
   destaqueLabel: {
     fontSize: 12,

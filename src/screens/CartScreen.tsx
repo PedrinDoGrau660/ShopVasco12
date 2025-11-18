@@ -26,10 +26,6 @@ type SoundObject = {
   stopAsync: () => Promise<void>;
 };
 
-type VideoObject = {
-  // Métodos do Video que você pode precisar
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -220,29 +216,54 @@ const styles = StyleSheet.create({
   },
   videoContainer: {
     width: '90%',
-    height: 300,
-    backgroundColor: '#000'
+    aspectRatio: 16/9, // Proporção padrão de vídeo
+    backgroundColor: '#000',
+    borderRadius: 12,
+    overflow: 'hidden'
   },
   video: {
-    flex: 1
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
   closeButton: {
     position: 'absolute',
-    top: 40,
+    top: 50,
     right: 20,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 20,
     width: 40,
     height: 40,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 1000
   },
   videoTitle: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center'
+  },
+  modalContent: {
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 20
+  },
+  whatsappButton: {
+    backgroundColor: '#25D366',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 20,
+    minWidth: 200,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10
+  },
+  whatsappButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold'
   }
 });
 
@@ -282,6 +303,7 @@ function EmptyCartScreen() {
 }
 
 // COMPONENTE PRINCIPAL PARA CARRINHO COM ITENS
+// COMPONENTE PRINCIPAL PARA CARRINHO COM ITENS
 function CartWithItems() {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
   const {
@@ -310,22 +332,11 @@ function CartWithItems() {
 
       // Carrega e toca a música
       const { sound } = await Audio.Sound.createAsync(
-        // Substitua pelo seu arquivo de música
-        // require('../../assets/celebration-sound.mp3'),
-        { uri: 'https://www.soundjay.com/button/beep-07.mp3' }, // URL temporária para teste
+        require('./videos/aplausos.mp3'),
         { shouldPlay: true }
       );
       
       soundRef.current = sound as unknown as SoundObject;
-
-      // Para a música automaticamente após 5 segundos
-      setTimeout(async () => {
-        if (soundRef.current) {
-          await soundRef.current.stopAsync();
-          await soundRef.current.unloadAsync();
-          soundRef.current = null;
-        }
-      }, 5000);
 
     } catch (error) {
       console.log('Erro ao tocar música:', error);
@@ -348,29 +359,71 @@ function CartWithItems() {
   const handleCloseModal = () => {
     setModalVisible(false);
     
+    // 👇 AQUI ESTÁ A MUDANÇA IMPORTANTE: LIMPA O CARRINHO
+    clearCart();
+    
     // Limpa o som se estiver tocando
     if (soundRef.current) {
       soundRef.current.unloadAsync();
       soundRef.current = null;
     }
-    
-    // Abre o WhatsApp após fechar o vídeo
-    const mensagem = `Olá! Gostaria de comprar os seguintes produtos:\n\n${
-      cartItems.map(item => 
-        `${item.nome} - ${item.cor} - Quantidade: ${item.quantidade} - ${formatarPreco(item.precoDesconto || item.preco)}`
-      ).join('\n')
-    }\n\nTotal: ${formatarPreco(getTotalPrice())}`;
+  };
 
-    Linking.openURL(`https://wa.me/5511999999999?text=${encodeURIComponent(mensagem)}`);
-    
-    // Limpa o carrinho após finalizar a compra
+   const handleOpenWhatsApp = () => {
+    // 👇 SUBSTITUA A MENSAGEM ATUAL POR ESTA:
+    const mensagem = `🛒 *PEDIDO - VASCO STORE* 🛒\n\n` +
+      
+      `*RESPOSTA AUTOMÁTICA:*\n` +
+      `✅ Pedido recebido com sucesso!\n` +
+      `📋 Nº do pedido: #${Math.random().toString(36).substr(2, 9).toUpperCase()}\n` +
+      `⏰ Retornaremos em até 5 minutos\n` +
+      `📞 Horário comercial: Seg-Sex 9h-18h\n\n` +
+      
+      `*ITENS DO PEDIDO:*\n\n` +
+      `${cartItems.map((item, index) => 
+        `*${index + 1}. ${item.nome}*\n` +
+        `🔹 Cor: ${item.cor}\n` +
+        `🔹 Tamanho: ${item.tamanho}\n` +
+        `🔹 Quantidade: ${item.quantidade}\n` +
+        `🔹 Preço: ${formatarPreco(item.precoDesconto || item.preco)}\n\n`
+      ).join('')}` +
+      
+      `💰 *TOTAL DO PEDIDO: ${formatarPreco(getTotalPrice())}*\n\n` +
+      
+      `_Envie suas informações abaixo:_\n` +
+      `• Nome completo\n` +
+      `• Endereço completo\n` +
+      `• CEP\n` +
+      `• Telefone\n\n` +
+      
+      `💳 *FORMAS DE PAGAMENTO:*\n` +
+      `• Pix (5% off)\n` +
+      `• Cartão (até 12x)\n` +
+      `• Boleto (à vista)`;
+
+   Linking.openURL(`https://wa.me/554188395229?text=${encodeURIComponent(mensagem)}`)
+      .catch(() => {
+        Alert.alert('Erro', 'Não foi possível abrir o WhatsApp. Verifique se o aplicativo está instalado.');
+      });
+    // Limpa o carrinho após enviar para o WhatsApp
     clearCart();
+    
+    // Fecha o modal
+    setModalVisible(false);
+    
+    // Limpa o som
+    if (soundRef.current) {
+      soundRef.current.unloadAsync();
+      soundRef.current = null;
+    }
   };
 
   const handleVideoPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if ('didJustFinish' in status && status.didJustFinish) {
-      // Quando o vídeo terminar, fecha automaticamente e abre o WhatsApp
-      handleCloseModal();
+      // Quando o vídeo terminar, para a música mas NÃO fecha o modal automaticamente
+      if (soundRef.current) {
+        soundRef.current.stopAsync();
+      }
     }
   };
 
@@ -460,39 +513,42 @@ function CartWithItems() {
         visible={modalVisible}
         onRequestClose={handleCloseModal}
       >
-        <TouchableWithoutFeedback onPress={handleCloseModal}>
-          <View style={styles.modalContainer}>
-            <TouchableWithoutFeedback>
-              <View>
-                <Text style={styles.videoTitle}>🎉 Parabéns pela Compra! 🎉</Text>
-                <View style={styles.videoContainer}>
-                  <Video
-                    ref={videoRef}
-                    // source={require('../../assets/celebration-video.mp4')} // Substitua pelo seu vídeo
-                    source={{ uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }} // URL temporária para teste
-                    style={styles.video}
-                    resizeMode={ResizeMode.CONTAIN}
-                    shouldPlay={true}
-                    isLooping={false}
-                    onPlaybackStatusUpdate={handleVideoPlaybackStatusUpdate}
-                  />
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity 
+            style={styles.closeButton}
+            onPress={handleCloseModal}
+          >
+            <FontAwesome name="times" size={24} color="#fff" />
+          </TouchableOpacity>
+          
+          <View style={styles.modalContent}>
+            <Text style={styles.videoTitle}>🎉 Parabéns pela Compra! 🎉</Text>
             
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={handleCloseModal}
+            <View style={styles.videoContainer}>
+              <Video
+                ref={videoRef}
+                source={require('./videos/1118.mp4')}
+                style={styles.video}
+                resizeMode={ResizeMode.CONTAIN}
+                shouldPlay={true}
+                isLooping={false}
+                onPlaybackStatusUpdate={handleVideoPlaybackStatusUpdate}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.whatsappButton}
+              onPress={handleOpenWhatsApp}
             >
-              <FontAwesome name="times" size={24} color="#fff" />
+              <FontAwesome name="whatsapp" size={20} color="#fff" />
+              <Text style={styles.whatsappButtonText}>Abrir WhatsApp</Text>
             </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </Modal>
     </View>
   );
 }
-
 // COMPONENTE PRINCIPAL
 export default function CartScreen() {
   const { cartItems } = useCart();

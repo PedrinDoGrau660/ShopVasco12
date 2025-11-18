@@ -47,7 +47,7 @@ export default function Cores({ cores, onColorSelect }: Props) {
   return (
     <View style={style.container}>
       <View style={style.colorsSection}>
-        <Text style={style.colorsTitle}>Cores Disponíveis ({selectedColor})</Text>
+        <Text style={style.colorsTitle}>Cores Disponíveis </Text>
         
         <ScrollView 
           horizontal 

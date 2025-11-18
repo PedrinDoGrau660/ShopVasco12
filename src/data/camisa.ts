@@ -11,17 +11,24 @@ export interface Camisa {
   tamanhos: string[];
   destaque: boolean;
   novidade: boolean;
+   tipoConjunto?: 'duas-camisas' | 'social-completo';
+  opcoesCamisas?: {
+    id: number;
+    nome: string;
+    imagens: any[];
+    coresDisponiveis: string[];
+  }[];
 }
 
 export const camisas: Camisa[] = [
   // PRODUTOS FEMININOS (IDs 1-10)
   {
     id: 1,
-    nome: "VESTIDO SOCIAL FEMININO BRANCO VASCO",
+    nome: "CAMISA SOCIAL BRANCA",
     preco: 289.99,
     descricaoPreco: "R$ 289,99 à vista no Pix - Vindi ou 10x de R$ 34,90 com juros Cartão Visa - Vindi",
     categoria: "feminina",
-    subcategoria: "VESTIDOS SOCIAIS",
+    subcategoria: "CAMISA SOCIAL",
     imagens: [
       require('./CamisasImagens/CamisaBrancaLuisa.jpg'),
       require('./CamisasImagens/CamisaBrancaLuisaCorpo.jpg')
@@ -33,7 +40,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 2,
-    nome: "BLUSA LONGA FEMININA PRETA VASCO",
+    nome: "CAMISA MANGA LONGA FEMININA PRETA VASCO",
     preco: 179.99,
     descricaoPreco: "R$ 179,99 à vista no Pix - Vindi ou 8x de R$ 26,90 com juros Cartão Visa - Vindi",
     categoria: "feminina",
@@ -49,7 +56,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 3,
-    nome: "CAMISA SOCIAL FEMININA PRETA VASCO",
+    nome: "CAMISA FEMININA PRETA VASCO",
     preco: 139.99,
     descricaoPreco: "R$ 139,99 à vista no Pix - Vindi ou 6x de R$ 27,80 com juros Cartão Visa - Vindi",
     categoria: "feminina",
@@ -65,7 +72,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 4,
-    nome: "BLAZER SOCIAL FEMININO PRETO VASCO",
+    nome: "CAMISA SOCIAL FEMININO PRETO VASCO",
     preco: 329.99,
     descricaoPreco: "R$ 329,99 à vista no Pix - Vindi ou 12x de R$ 37,20 com juros Cartão Visa - Vindi",
     categoria: "feminina",
@@ -84,8 +91,8 @@ export const camisas: Camisa[] = [
   {
     id: 11,
     nome: "CAMISA SOCIAL MASCULINA BRANCA VASCO",
-    preco: 379.99,
-    descricaoPreco: "R$ 379,99 à vista no Pix - Vindi ou 12x de R$ 42,49 com juros Cartão Visa - Vindi",
+    preco: 329.99,
+    descricaoPreco: "R$ 329,99 à vista no Pix - Vindi ou 12x de R$ 42,49 com juros Cartão Visa - Vindi",
     categoria: "masculina",
     subcategoria: "CAMISAS SOCIAIS",
     imagens: [
@@ -99,7 +106,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 12,
-    nome: "CAMISA LONGA MASCULINA PRETA VASCO",
+    nome: "CAMISA MANGA LONGA MASCULINA PRETA VASCO",
     preco: 319.99,
     descricaoPreco: "R$ 319,99 à vista no Pix - Vindi ou 12x de R$ 36,10 com juros Cartão Visa - Vindi",
     categoria: "masculina",
@@ -115,7 +122,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 13,
-    nome: "CAMISA SOCIAL MASCULINA PRETA VASCO",
+    nome: "CAMISA MASCULINA PRETA VASCO",
     preco: 199.99,
     descricaoPreco: "R$ 199,99 à vista no Pix - Vindi ou 10x de R$ 24,50 com juros Cartão Visa - Vindi",
     categoria: "masculina",
@@ -131,7 +138,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 14,
-    nome: "CAMISA SOCIAL MASCULINA BRANCA PEDRO",
+    nome: "CAMISA MASCULINA BRANCA",
     preco: 159.99,
     descricaoPreco: "R$ 159,99 à vista no Pix - Vindi ou 6x de R$ 30,90 com juros Cartão Visa - Vindi",
     categoria: "masculina",
@@ -147,7 +154,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 15,
-    nome: "CAMISA PIXBET MASCULINA BRANCA VASCO",
+    nome: "CAMISA PIXBET MASCULINA PRETA VASCO",
     preco: 159.99,
     descricaoPreco: "R$ 159,99 à vista no Pix - Vindi ou 6x de R$ 30,90 com juros Cartão Visa - Vindi",
     categoria: "masculina",
@@ -165,7 +172,7 @@ export const camisas: Camisa[] = [
   },
   {
     id: 16,
-    nome: "CAMISA BETFAIR MASCULINA BRANCA VASCO",
+    nome: "CAMISA BETFAIR MASCULINA PRETA VASCO",
     preco: 159.99,
     descricaoPreco: "R$ 159,99 à vista no Pix - Vindi ou 6x de R$ 30,90 com juros Cartão Visa - Vindi",
     categoria: "masculina",
@@ -182,21 +189,8 @@ export const camisas: Camisa[] = [
 
   // CONJUNTOS (IDs 21-30)
   {
-    id: 21,
-    nome: "CONJUNTO SOCIAL BRANCO E PRETO VASCO",
-    preco: 599.99,
-    descricaoPreco: "R$ 599,99 à vista no Pix - Vindi ou 12x de R$ 65,80 com juros Cartão Visa - Vindi",
-    categoria: "conjunto",
-    subcategoria: "CONJUNTOS SOCIAIS",
-    imagens: [require('./CamisasImagens/Conjunto.jpg')],
-    cores: ["Branco", "Preto"],
-    tamanhos: ["P", "M", "G", "GG"],
-    destaque: true,
-    novidade: true
-  },
-  {
     id: 22,
-    nome: "CONJUNTO SOCIAL MASCULINO PRETO VASCO",
+    nome: "CONJUNTO CAMISAS NEGRAS VASCO",
     preco: 349.99,
     descricaoPreco: "R$ 349,99 à vista no Pix - Vindi ou 10x de R$ 41,80 com juros Cartão Visa - Vindi",
     categoria: "conjunto",
@@ -210,9 +204,51 @@ export const camisas: Camisa[] = [
     destaque: false,
     novidade: true
   },
+   {
+    id: 21,
+    nome: "CONJUNTO SOCIAL BRANCO E PRETO VASCO",
+    preco: 599.99,
+    descricaoPreco: "R$ 599,99 à vista no Pix - Vindi ou 12x de R$ 65,80 com juros Cartão Visa - Vindi",
+    categoria: "conjunto",
+    subcategoria: "CONJUNTOS SOCIAIS",
+    imagens: [
+      require('./CamisasImagens/Conjunto.jpg'),
+      require('./CamisasImagens/conjuntoBrancoSocial.png'),
+      require('./CamisasImagens/conjuntoPretoSocial.jpg'),
+      require('./CamisasImagens/CamisaVermelhaSocial.jpg')
+
+    ],
+    cores: ["Branco", "Preto"],
+    tamanhos: ["P", "M", "G", "GG"],
+    destaque: true,
+    novidade: true,
+    tipoConjunto: 'social-completo',
+     opcoesCamisas: [
+      {
+        id: 1,
+        nome: "CAMISA SOCIAL PRETA",
+        imagens: [require('./CamisasImagens/CamisaPretaSocialLuisa.jpg')],
+        coresDisponiveis: ["Preto"]
+      },
+      {
+        id: 2,
+        nome: "CAMISA SOCIAL BRANCA",
+        imagens: [require('./CamisasImagens/CamisaBrancaPedro.jpg')],
+        coresDisponiveis: ["Branca"]
+      },
+      {
+        id: 3,
+        nome: "CAMISA SOCIAL VERMELHA",
+        imagens: [require('./CamisasImagens/CamisaVermelhaSocial.jpg')],
+        coresDisponiveis: ["Vermelha"]
+      },
+    ]
+  },
+
+ 
   {
     id: 23,
-    nome: "CONJUNTO SOCIAL DUPLO MASCULINO VASCO",
+    nome: "2 CAMISAS PELO PREÇO DE 1",
     preco: 249.99,
     descricaoPreco: "R$ 249,99 à vista no Pix - Vindi ou 10x de R$ 29,80 com juros Cartão Visa - Vindi",
     categoria: "conjunto",
@@ -221,9 +257,30 @@ export const camisas: Camisa[] = [
       require('./CamisasImagens/conjunto2.png'),
       require('./CamisasImagens/conjunto2_1.png')
     ],
-    cores: ["Preto", "Cinza"],
+    cores: ["Preto", "Cinza", "Azul"],
     tamanhos: ["P", "M", "G", "GG"],
     destaque: false,
-    novidade: true
+    novidade: true,
+    tipoConjunto: 'duas-camisas',
+    opcoesCamisas: [
+      {
+        id: 1,
+        nome: "CAMISA  PRETA",
+        imagens: [require('./CamisasImagens/CamisaPreta.jpeg')],
+        coresDisponiveis: ["Preto"]
+      },
+      {
+        id: 2,
+        nome: "CAMISA AZUL",
+        imagens: [require('./CamisasImagens/Capturar.jpg')],
+        coresDisponiveis: ["Azul"]
+      },
+      {
+        id: 3,
+        nome: "CAMISAS NEGRAS",
+        imagens: [require('./CamisasImagens/camisasnegras.jpg')],
+        coresDisponiveis: ["Preta"]
+      },
+    ]
   },
 ];

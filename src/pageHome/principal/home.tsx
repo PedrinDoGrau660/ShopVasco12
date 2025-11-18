@@ -71,7 +71,7 @@ const PROXIMOS_JOGOS = [
     campeonato: 'Brasileirão Série A',
     adversario: 'Mirassol',
     local: 'São Januário',
-    horario: '20:00'
+    horario: 'A confirmar'
   },
   {
     id: '3',
